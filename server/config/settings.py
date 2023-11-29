@@ -15,7 +15,7 @@ class ServerSettings(BaseSettings):
     @property
     def fastapi_kwargs(self) -> Dict[str, Any]:
         return {
-            "debug": self._enable_debug,
+            "debug": self.DEBUG,
             "docs_url": None if self.ENV_MODE != "dev" else "/docs",
             "openapi_prefix": "",
             "openapi_url": None if self.ENV_MODE != "dev" else "/openapi.json",

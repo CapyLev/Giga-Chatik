@@ -11,6 +11,9 @@ class ServerSettings(BaseSettings):
     HOST: str = "0.0.0.0"
     PORT: int = "6969"
     WORKERS: int = cpu_count() * 2 - 1 if ENV_MODE == "prod" else 1
+    VERSION: str = "0.0.1"
+    SECRET: str = "some ultra secret secret c:"
+    COOKIE_LIFETIME: int = 3600
 
     @property
     def fastapi_kwargs(self) -> Dict[str, Any]:
@@ -27,15 +30,15 @@ class ServerSettings(BaseSettings):
 
 
 class DatabaseSettings(BaseSettings):
-    DB_HOST: str
-    DB_PORT: int
-    DB_NAME: str
-    DB_USER: str
-    DB_PASS: str
+    DB_HOST: str = "database"
+    DB_PORT: int = 5432
+    DB_NAME: str = "postgres"
+    DB_USER: str = "postgres"
+    DB_PASS: str = "postgres"
 
     @property
-    def database_url(self):
-        return f"postgresql+asyncpg://{self.database.DB_USER}:{self.database.DB_PASS}@{self.database.DB_HOST}:{self.database.DB_PORT}/{self.database.DB_NAME}"
+    def DATABASE_URL(self):
+        return f"postgresql+asyncpg://{self.DB_USER}:{self.DB_PASS}@{self.DB_HOST}:{self.DB_PORT}/{self.DB_NAME}"
 
 
 class Settings(BaseSettings):

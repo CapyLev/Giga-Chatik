@@ -19,5 +19,6 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY src/ /usr/src/app/src/
 COPY config/ /usr/src/app/config/
+COPY alembic.ini /usr/src/app/
 
 CMD ["python", "-m", "src.main"]

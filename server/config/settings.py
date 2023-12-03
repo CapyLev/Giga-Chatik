@@ -1,5 +1,5 @@
 from multiprocessing import cpu_count
-from typing import Any, Dict
+from typing import Any, Dict, List
 
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
@@ -30,23 +30,23 @@ class ServerSettings(BaseSettings):
 
 
 class DatabaseSettings(BaseSettings):
-    DB_HOST: str = "database"
-    DB_PORT: int = 5432
-    DB_NAME: str = "postgres"
-    DB_USER: str = "postgres"
-    DB_PASS: str = "postgres"
+    HOST: str = "database"
+    PORT: int = 5432
+    NAME: str = "postgres"
+    USER: str = "postgres"
+    PASS: str = "postgres"
 
     @property
     def DATABASE_URL(self):
-        return f"postgresql+asyncpg://{self.DB_USER}:{self.DB_PASS}@{self.DB_HOST}:{self.DB_PORT}/{self.DB_NAME}"
+        return f"postgresql+asyncpg://{self.USER}:{self.PASS}@{self.HOST}:{self.PORT}/{self.NAME}"
 
 
 class CassandraSettings(BaseSettings):
-    CASSANDRA_HOST: str = "cassandra"
-    CASSANDRA_PORT: int = 9696
-    CASSANDRA_USERNAME: str = "master"
-    CASSANDRA_PASSWORD: str = "mypassword"
-    CASSANDRA_KEYSPACE: str = "msgStorage"
+    HOST: List[str] = ["cassandra",]
+    PORT: int = 9696
+    USERNAME: str = "master"
+    PASSWORD: str = "mypassword"
+    KEYSPACE: str = "msgStorage"
 
 
 class Settings(BaseSettings):

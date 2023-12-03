@@ -41,11 +41,20 @@ class DatabaseSettings(BaseSettings):
         return f"postgresql+asyncpg://{self.DB_USER}:{self.DB_PASS}@{self.DB_HOST}:{self.DB_PORT}/{self.DB_NAME}"
 
 
+class CassandraSettings(BaseSettings):
+    CASSANDRA_HOST: str = "cassandra"
+    CASSANDRA_PORT: int = 9696
+    CASSANDRA_USERNAME: str = "master"
+    CASSANDRA_PASSWORD: str = "mypassword"
+    CASSANDRA_KEYSPACE: str = "msgStorage"
+
+
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file=".env")
 
     server: ServerSettings = ServerSettings()
     database: DatabaseSettings = DatabaseSettings()
+    cassandra: CassandraSettings = CassandraSettings()
 
 
 settings = Settings()

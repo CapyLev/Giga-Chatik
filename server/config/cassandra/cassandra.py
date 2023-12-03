@@ -1,15 +1,20 @@
-from cassandra.cluster import Cluster
 from cassandra.auth import PlainTextAuthProvider
+from cassandra.cluster import Cluster
+from cassandra.cqlengine.connection import register_connection, set_default_connection
+
 from ..settings import settings
 
-
-auth_provider = PlainTextAuthProvider(
-    username=settings.cassandra.CASSANDRA_USERNAME,
-    password=settings.cassandra.CASSANDRA_PASSWORD,
+AUTH_PROVIDER = PlainTextAuthProvider(
+    username=settings.cassandra.USERNAME,
+    password=settings.cassandra.PASSWORD,
 )
 
 cluster = Cluster(
-    [f"{settings.cassandra.CASSANDRA_HOST}:{settings.cassandra.CASSANDRA_PORT}"],
+    settings.cassandra.HOST,
+    auth_provider=AUTH_PROVIDER,
 )
 
-session = cluster.connect(settings.cassandra.CASSANDRA_KEYSPACE)
+session = cluster.connect(settings.cassandra.KEYSPACE)
+
+register_connection(str(session), session=session)
+set_default_connection(str(session))

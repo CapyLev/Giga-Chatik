@@ -20,6 +20,8 @@ services:
     image: postgres:16
     container_name: database
     restart: always
+    ports:
+      - '6968:5432'
     env_file:
       - ./server/.env
     volumes:
@@ -27,8 +29,22 @@ services:
     networks:
       - chatik-network
 
+  cassandra:
+    image: cassandra:5
+    container_name: cassandra
+    restart: always
+    ports:
+      - '9696:9042'
+    env_file:
+      - ./server/.env
+    volumes:
+      - cassandra_data:/var/lib/cassandra
+    networks:
+      - chatik-network
+
 volumes:
   pg_data:
+  cassandra_data:
 
 networks:
   chatik-network:

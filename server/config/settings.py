@@ -2,6 +2,15 @@ from multiprocessing import cpu_count
 from typing import Any, Dict, List
 
 from pydantic_settings import BaseSettings, SettingsConfigDict
+from pydantic import (
+    AliasChoices,
+    AmqpDsn,
+    BaseModel,
+    Field,
+    ImportString,
+    PostgresDsn,
+    RedisDsn,
+)
 
 
 class ServerSettings(BaseSettings):
@@ -37,16 +46,20 @@ class DatabaseSettings(BaseSettings):
     PASS: str = "postgres"
 
     @property
-    def DATABASE_URL(self):
+    def DATABASE_URL(self) -> str:
         return f"postgresql+asyncpg://{self.USER}:{self.PASS}@{self.HOST}:{self.PORT}/{self.NAME}"
 
 
-class CassandraSettings(BaseSettings):
-    HOST: List[str] = ["cassandra",]
-    PORT: int = 9696
-    USERNAME: str = "master"
-    PASSWORD: str = "mypassword"
-    KEYSPACE: str = "msgStorage"
+class MongoSettings(BaseSettings):
+    NAME: str = Field("msgStorage", validation_alias="MONGO_INITDB_DB_NAME")
+    HOST: str = Field("localhost", validation_alias="MONGO_INITDB_HOST")
+    PORT: int = Field("27017", validation_alias="MONGO_INITDB_PORT")
+    USER: str = Field("mongodb_user", validation_alias="MONGO_INITDB_ROOT_USERNAME")
+    PASS: str = Field("mongodb_pass", validation_alias="MONGO_INITDB_ROOT_PASSWORD")
+
+    @property
+    def MONGO_URL(self) -> str:
+        return f"mongodb://{self.USER}:{self.PASS}@{self.HOST}:{self.PORT}/{self.NAME}"
 
 
 class Settings(BaseSettings):
@@ -54,7 +67,7 @@ class Settings(BaseSettings):
 
     server: ServerSettings = ServerSettings()
     database: DatabaseSettings = DatabaseSettings()
-    cassandra: CassandraSettings = CassandraSettings()
+    mongo: MongoSettings = MongoSettings()
 
 
 settings = Settings()

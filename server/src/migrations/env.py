@@ -9,6 +9,8 @@ from sqlalchemy.ext.asyncio import async_engine_from_config
 from config.database import Base
 from config.settings import settings
 
+from src.modules.server.models import Server, UserServer
+
 config = context.config
 
 if config.config_file_name is not None:

@@ -23,6 +23,8 @@ services:
       - ./server/.env
     volumes:
       - mongodb_data:/data/db
+    networks:
+      - chatik-network
 
   server:
     build:
@@ -41,7 +43,6 @@ services:
 
 volumes:
   pg_data:
-  cassandra_data:
   mongodb_data:
 
 

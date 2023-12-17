@@ -40,6 +40,9 @@ class UserManager(UUIDIDMixin, BaseUserManager[User, uuid.UUID]):
     async def on_after_register(self, user: User, request: Optional[Request] = None):
         pass
 
+    async def on_after_delete(self, user: User, request: Optional[Request] = None):
+        pass
+
     async def create(
         self,
         user_create: schemas.UC,

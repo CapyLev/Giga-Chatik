@@ -1,7 +1,16 @@
 from multiprocessing import cpu_count
-from typing import Any, Dict
+from typing import Any, Dict, List
 
 from pydantic_settings import BaseSettings, SettingsConfigDict
+from pydantic import (
+    AliasChoices,
+    AmqpDsn,
+    BaseModel,
+    Field,
+    ImportString,
+    PostgresDsn,
+    RedisDsn,
+)
 
 
 class ServerSettings(BaseSettings):
@@ -11,11 +20,15 @@ class ServerSettings(BaseSettings):
     HOST: str = "0.0.0.0"
     PORT: int = "6969"
     WORKERS: int = cpu_count() * 2 - 1 if ENV_MODE == "prod" else 1
+    VERSION: str = "0.0.1"
+    SECRET: str = "some ultra secret secret c:"
+    COOKIE_LIFETIME: int = 3600
+    LOG_LEVEL: str = "debug"
 
     @property
     def fastapi_kwargs(self) -> Dict[str, Any]:
         return {
-            "debug": self._enable_debug,
+            "debug": self.DEBUG,
             "docs_url": None if self.ENV_MODE != "dev" else "/docs",
             "openapi_prefix": "",
             "openapi_url": None if self.ENV_MODE != "dev" else "/openapi.json",
@@ -27,15 +40,28 @@ class ServerSettings(BaseSettings):
 
 
 class DatabaseSettings(BaseSettings):
-    DB_HOST: str
-    DB_PORT: int
-    DB_NAME: str
-    DB_USER: str
-    DB_PASS: str
+    HOST: str = "database"
+    PORT: int = 5432
+    NAME: str = "postgres"
+    USER: str = "postgres"
+    PASS: str = "postgres"
 
     @property
-    def database_url(self):
-        return f"postgresql+asyncpg://{self.database.DB_USER}:{self.database.DB_PASS}@{self.database.DB_HOST}:{self.database.DB_PORT}/{self.database.DB_NAME}"
+    def DATABASE_URL(self) -> str:
+        return f"postgresql+asyncpg://{self.USER}:{self.PASS}@{self.HOST}:{self.PORT}/{self.NAME}"
+
+
+class MongoSettings(BaseSettings):
+    NAME: str = Field("msgStorage", validation_alias="MONGO_INITDB_DB_NAME")
+    COLLECTION: str = Field("msgStorage", validation_alias="MONGO_INITDB_COLLECTION")
+    HOST: str = Field("mongodb", validation_alias="MONGO_INITDB_HOST")
+    PORT: int = Field("27017", validation_alias="MONGO_INITDB_PORT")
+    USER: str = Field("mongodb_user", validation_alias="MONGO_INITDB_ROOT_USERNAME")
+    PASS: str = Field("mongodb_pass", validation_alias="MONGO_INITDB_ROOT_PASSWORD")
+
+    @property
+    def MONGO_URL(self) -> str:
+        return f"mongodb://{self.USER}:{self.PASS}@{self.HOST}:{self.PORT}"
 
 
 class Settings(BaseSettings):
@@ -43,6 +69,7 @@ class Settings(BaseSettings):
 
     server: ServerSettings = ServerSettings()
     database: DatabaseSettings = DatabaseSettings()
+    mongo: MongoSettings = MongoSettings()
 
 
 settings = Settings()

@@ -3,6 +3,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from config.settings import settings
+from config.mongo import mongo_db_connection
 
 from .modules.router import routes
 
@@ -19,6 +20,10 @@ def start_application() -> FastAPI:
     return app
 
 
+async def startup():
+    await mongo_db_connection.init_mongo_db()
+
+
 def setup_settings(app: FastAPI) -> None:
     origins = ["*"]
     app.add_middleware(
@@ -29,10 +34,12 @@ def setup_settings(app: FastAPI) -> None:
         allow_headers=["*"],
     )
 
+    app.add_event_handler("startup", startup)
     app.include_router(router=routes)
 
 
 app: FastAPI = start_application()
+
 
 if __name__ == "__main__":
     uvicorn.run(
@@ -41,4 +48,5 @@ if __name__ == "__main__":
         port=settings.server.PORT,
         workers=settings.server.WORKERS,
         reload=True,
+        log_level=settings.server.LOG_LEVEL,
     )

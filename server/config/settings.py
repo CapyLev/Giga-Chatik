@@ -23,6 +23,7 @@ class ServerSettings(BaseSettings):
     VERSION: str = "0.0.1"
     SECRET: str = "some ultra secret secret c:"
     COOKIE_LIFETIME: int = 3600
+    LOG_LEVEL: str = "debug"
 
     @property
     def fastapi_kwargs(self) -> Dict[str, Any]:
@@ -52,14 +53,15 @@ class DatabaseSettings(BaseSettings):
 
 class MongoSettings(BaseSettings):
     NAME: str = Field("msgStorage", validation_alias="MONGO_INITDB_DB_NAME")
-    HOST: str = Field("localhost", validation_alias="MONGO_INITDB_HOST")
+    COLLECTION: str = Field("msgStorage", validation_alias="MONGO_INITDB_COLLECTION")
+    HOST: str = Field("mongodb", validation_alias="MONGO_INITDB_HOST")
     PORT: int = Field("27017", validation_alias="MONGO_INITDB_PORT")
     USER: str = Field("mongodb_user", validation_alias="MONGO_INITDB_ROOT_USERNAME")
     PASS: str = Field("mongodb_pass", validation_alias="MONGO_INITDB_ROOT_PASSWORD")
 
     @property
     def MONGO_URL(self) -> str:
-        return f"mongodb://{self.USER}:{self.PASS}@{self.HOST}:{self.PORT}/{self.NAME}"
+        return f"mongodb://{self.USER}:{self.PASS}@{self.HOST}:{self.PORT}"
 
 
 class Settings(BaseSettings):

@@ -1,8 +1,7 @@
-import './App.css'
-import NavigateBar from './components/NavigateBar/NavigateBar'
+import NavigateBar from './NavigateBar/NavigateBar'
+import "./global.scss";
 
 function App() {
-
   return (
     <div>
       <NavigateBar />

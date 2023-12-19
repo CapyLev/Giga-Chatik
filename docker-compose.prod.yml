@@ -41,31 +41,6 @@ services:
     networks:
       - chatik-network
 
-  client:
-    build:
-        context: ./client
-        target: dev
-        dockerfile: ./Dockerfile
-    volumes:
-        - ./client/:/usr/src/app/
-        - ./client/node_modules/:/usr/src/app/node_modules
-        - ./client/.next/:/usr/src/app/.next
-    ports:
-      - "3232:3000"
-
-  nginx:
-    build:
-      context: nginx
-      dockerfile: Dockerfile
-    restart: always
-    container_name: nginx
-    ports:
-      - '80:8080'
-    depends_on:
-      - server
-    networks:
-      - chatik-network
-
 volumes:
   pg_data:
   mongodb_data:

@@ -2,11 +2,12 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { FC } from "react";
 import styles from "./NavigateBar.module.scss";
+import {Routers} from "@/utils/common";
 
 const NavigateBar: FC = () => {
   return (
     <div className={styles.navigationContainer}>
-      <Link href="/home">
+      <Link href={Routers.HOME}>
         <div>
           <Image
             className={styles.homeIcon}

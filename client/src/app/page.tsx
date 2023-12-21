@@ -1,9 +1,12 @@
 import EntryPoint from "@/components/EntryPoint/EntryPoint"
+import {FC} from "react";
 
-export default function WelcomePage() {
-  return (
-    <>
-      <EntryPoint/>
-    </>
-  );
+const WelcomePage: FC = () => {
+    return (
+        <div>
+            <EntryPoint/>
+        </div>
+    );
 }
+
+export default WelcomePage;

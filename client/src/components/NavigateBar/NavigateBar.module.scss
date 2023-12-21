@@ -1,31 +1,31 @@
 .navigationContainer {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 70px;
-    height: 100vh;
-    background-color: #151313;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 70px;
+  height: 100vh;
+  background-color: #151313;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  overflow: hidden;
+
+  &:after {
+    content: "";
+    height: 2px;
+    width: calc(100% - 20px);
+    background-color: #ae9d00;
+    border-radius: 10px;
+    bottom: 0;
+    left: 10px;
+  }
+
+  .homeIcon {
+    margin: 5px;
+    border-radius: 10px;
+    width: 55px;
+    height: 55px;
     overflow: hidden;
-
-    &:after {
-        content: "";
-        height: 2px;
-        width: calc(100% - 20px);
-        background-color: #ae9d00;
-        border-radius: 10px;
-        bottom: 0;
-        left: 10px;
-    }
-
-    .homeIcon {
-        margin: 5px;
-        border-radius: 10px;
-        width: 55px;
-        height: 55px;
-        overflow: hidden;
-    }
+  }
 }

@@ -1,25 +1,44 @@
-import Link from "next/link";
+"use client";
+
+import React, { FC, useState } from "react";
 import styles from "./EntryPoint.module.scss";
-import { FC } from "react";
+import SignIn from "@/components/AuthComponents/SignIn/SignIn";
+import SignUp from "@/components/AuthComponents/SignUp/SignUp";
 
 const EntryPoint: FC = () => {
+  const [isSignInModalOpened, setSignInModalOpened] = useState<boolean>(false);
+  const [isSignUpModalOpened, setSignUpModalOpened] = useState<boolean>(false);
 
-    return (
-        <div>
-            <div className={styles.title}>
-                <h1>Hello!</h1>
-            </div>
-            <div className={styles.actions}>
-                {/*change to 2 different modals*/}
-                <Link href="/signin">
-                    <div className={styles.action}>SIGN IN</div>
-                </Link>
-                <Link href="/signup">
-                    <div className={styles.action}>SIGN UP</div>
-                </Link>
-            </div>
-        </div>
-    );
-}
+  const closeModal = () => {
+    setSignInModalOpened(false);
+    setSignUpModalOpened(false);
+  };
+
+  return (
+    <div>
+      <div className={styles.title}>
+        <h1>Hello!</h1>
+      </div>
+      <div className={styles.actions}>
+        <button
+          className={styles.action}
+          onClick={() => setSignInModalOpened(true)}
+        >
+          SIGN IN
+        </button>
+
+        <button
+          className={styles.action}
+          onClick={() => setSignUpModalOpened(true)}
+        >
+          SIGN UP
+        </button>
+      </div>
+
+      {isSignInModalOpened && <SignIn closeModal={closeModal} />}
+      {isSignUpModalOpened && <SignUp closeModal={closeModal} />}
+    </div>
+  );
+};
 
 export default EntryPoint;

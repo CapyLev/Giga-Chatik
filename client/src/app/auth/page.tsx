@@ -4,6 +4,6 @@ const AuthPage = () => {
       <h1>hehe</h1>
     </>
   );
-}
+};
 
 export default AuthPage;

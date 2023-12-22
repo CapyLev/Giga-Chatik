@@ -3,9 +3,9 @@ import { FC } from "react";
 
 const WelcomePage: FC = () => {
   return (
-    <div>
+    <>
       <EntryPoint />
-    </div>
+    </>
   );
 };
 

@@ -2,8 +2,8 @@
 
 import React, { FC, useState } from "react";
 import styles from "./EntryPoint.module.scss";
-import SignIn from "@/components/AuthComponents/SignIn/SignIn";
-import SignUp from "@/components/AuthComponents/SignUp/SignUp";
+import SignIn from "@/components/modals/SignIn/SignIn";
+import SignUp from "@/components/modals/SignUp/SignUp";
 
 const EntryPoint: FC = () => {
   const [isSignInModalOpened, setSignInModalOpened] = useState<boolean>(false);

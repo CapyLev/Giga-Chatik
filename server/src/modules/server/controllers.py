@@ -12,4 +12,4 @@ router = APIRouter()
 async def get_user_servers(
     user: UserEntity = Depends(user_service.get_current_user()),
 ):
-    return await user_server_service.get_servers_by_user_id(user.id)
+    print(await user_server_service.get_servers_by_user_id(user.id))

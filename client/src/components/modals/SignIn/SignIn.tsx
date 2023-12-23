@@ -1,15 +1,15 @@
 import React, { FC, useState } from "react";
-import { useRouter } from "next/navigation";
 import styles from "@/components/modals/Modals.module.scss";
 import * as authService from "@/services/auth.service";
-import { Routers } from "@/utils/common";
+import { isSignInCredentialsValid } from "@/utils/auth";
+import { ModalProps, AuthValidationState } from "@/interfaces/common";
+import { redirect } from "next/navigation";
 
-interface SignInProps {
-  closeModal: () => void;
-}
+const SignIn: FC<ModalProps> = ({ closeModal }) => {
+  const [validationError, setValidationError] = useState<
+    AuthValidationState["validationError"] | null
+  >(null);
 
-const SignIn: FC<SignInProps> = ({ closeModal }) => {
-  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -22,9 +22,15 @@ const SignIn: FC<SignInProps> = ({ closeModal }) => {
   };
 
   const handleSubmit = async () => {
-    const result = await authService.signIn(email, password);
-    if (result) {
-      router.push(Routers.HOME);
+    const validationErrors = await isSignInCredentialsValid(email, password);
+
+    if (validationErrors && validationErrors.length > 0) {
+      setValidationError(validationErrors);
+    } else {
+      setValidationError(null);
+      const accessToken = await authService.signIn(email, password);
+      localStorage.setItem("token", accessToken);
+      redirect('/home');
     }
   };
 
@@ -33,34 +39,35 @@ const SignIn: FC<SignInProps> = ({ closeModal }) => {
   };
 
   return (
-    <>
-      <div className={styles.overlay} onClick={closeModal}>
-        <div className={styles.modal} onClick={handleContainerClick}>
-          <span className={styles.close} onClick={closeModal}>
-            &times;
-          </span>
-          <div className={styles.modalContent}>
-            <input
-              type="email"
-              placeholder="Email"
-              value={email}
-              onChange={handleEmailChange}
-              className={styles.input}
-            />
-            <input
-              type="password"
-              placeholder="Password"
-              value={password}
-              onChange={handlePasswordChange}
-              className={styles.input}
-            />
-            <button onClick={handleSubmit} className={styles.submitButton}>
-              Submit
-            </button>
-          </div>
+    <div className={styles.overlay} onClick={closeModal}>
+      <div className={styles.modal} onClick={handleContainerClick}>
+        <span className={styles.close} onClick={closeModal}>
+          &times;
+        </span>
+        <div className={styles.modalContent}>
+          {validationError && (
+            <div className={styles.validationError}>{validationError[0]}</div>
+          )}
+          <input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={handleEmailChange}
+            className={styles.input}
+          />
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={handlePasswordChange}
+            className={styles.input}
+          />
+          <button onClick={handleSubmit} className={styles.submitButton}>
+            Submit
+          </button>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

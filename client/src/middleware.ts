@@ -1,11 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
 export async function middleware(request: NextRequest): Promise<NextResponse> {
-  const cookie = request.cookies.get("4atik");
-
-  if (!cookie?.value) {
-    return NextResponse.redirect(new URL("/", request.url));
-  }
+  // TODO: добавить проверку на наличие токена
 
   return NextResponse.next();
 }

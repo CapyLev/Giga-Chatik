@@ -1,14 +1,16 @@
 import React, { FC, useState } from "react";
+import { useRouter } from 'next/navigation'
 import styles from "@/components/modals/Modals.module.scss";
 import * as authService from "@/services/auth.service";
-import { Routers } from "@/utils/common";
-import router from "next/router";
+import { isSignUpCredentialsValid } from "@/utils/auth";
+import { AuthValidationState, ModalProps } from "@/interfaces/common";
 
-interface SignUpProps {
-  closeModal: () => void;
-}
+const SignUp: FC<ModalProps> = ({ closeModal }) => {
+  const router = useRouter();
 
-const SignUp: FC<SignUpProps> = ({ closeModal }) => {
+  const [validationError, setValidationError] =
+    useState<AuthValidationState["validationError"]>(null);
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [repeatPassword, setRepeatPassword] = useState("");
@@ -27,15 +29,24 @@ const SignUp: FC<SignUpProps> = ({ closeModal }) => {
   };
 
   const handleRepeatPasswordChange = (
-    e: React.ChangeEvent<HTMLInputElement>
+    e: React.ChangeEvent<HTMLInputElement>,
   ) => {
     setRepeatPassword(e.target.value);
   };
 
   const handleSubmit = async () => {
-    const result = await authService.signUp(email, username, password);
-    if (result) {
-      router.push(Routers.HOME);
+    const validationErrors = await isSignUpCredentialsValid(
+      email,
+      username,
+      password,
+    );
+
+    if (validationErrors && validationErrors.length > 0) {
+      setValidationError(validationErrors);
+    } else {
+      const { token, user } = await authService.signUp(email, username, password);
+      localStorage.setItem("token", token);
+      router.push('/home');
     }
   };
 
@@ -51,6 +62,9 @@ const SignUp: FC<SignUpProps> = ({ closeModal }) => {
             &times;
           </span>
           <div className={styles.modalContent}>
+            {validationError && (
+              <div className={styles.validationError}>{validationError[0]}</div>
+            )}
             <input
               type="email"
               placeholder="Email"

@@ -1,4 +1,9 @@
-declare module "*.scss" {
-  const content: Record<string, string>;
-  export default content;
+export type isOptionalString = string | undefined;
+
+export interface ModalProps {
+  closeModal: () => void;
+}
+
+export interface AuthValidationState {
+  validationError: string[] | null;
 }

@@ -18,6 +18,7 @@ class Server(Base):
     )
     created_at: Mapped[datetime] = mapped_column(TIMESTAMP, default=datetime.utcnow())
 
-    admin: Mapped[UUID_ID] = relationship(
-        "User", back_populates="server", uselist=False
+    admin: Mapped["User"] = relationship(
+        back_populates="admined_servers", uselist=False
     )
+    user_servers: Mapped[List["UserServer"]] = relationship(back_populates="server")

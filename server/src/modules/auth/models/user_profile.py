@@ -1,7 +1,7 @@
 from typing import Optional
 from fastapi_users_db_sqlalchemy import UUID_ID
 from sqlalchemy import ForeignKey, String
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from config.database import Base
 
@@ -13,3 +13,5 @@ class UserProfile(Base):
         index=True,
     )
     status: Mapped[Optional[str]] = mapped_column(String(length=250), nullable=True)
+
+    user: Mapped["User"] = relationship()

@@ -1,5 +1,4 @@
 from datetime import datetime
-from typing import Optional
 from fastapi_users_db_sqlalchemy import UUID_ID
 from sqlalchemy import TIMESTAMP, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
@@ -17,5 +16,5 @@ class UserServer(Base):
     )
     created_at: Mapped[datetime] = mapped_column(TIMESTAMP, default=datetime.utcnow())
 
-    user = relationship("User", back_populates="user_servers")
-    server = relationship("Server", back_populates="user_servers")
+    user: Mapped["User"] = relationship(back_populates="user_servers")
+    server: Mapped["Server"] = relationship(back_populates="user_servers")

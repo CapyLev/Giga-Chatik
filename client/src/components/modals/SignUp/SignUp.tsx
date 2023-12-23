@@ -1,5 +1,5 @@
 import React, { FC, useState } from "react";
-import { useRouter } from 'next/navigation'
+import { useRouter } from "next/navigation";
 import styles from "@/components/modals/Modals.module.scss";
 import * as authService from "@/services/auth.service";
 import { isSignUpCredentialsValid } from "@/utils/auth";
@@ -44,9 +44,9 @@ const SignUp: FC<ModalProps> = ({ closeModal }) => {
     if (validationErrors && validationErrors.length > 0) {
       setValidationError(validationErrors);
     } else {
-      const { token, user } = await authService.signUp(email, username, password);
-      localStorage.setItem("token", token);
-      router.push('/home');
+      const user = await authService.signUp(email, username, password);
+      localStorage.setItem('userId', user.id);
+      router.push("/home");
     }
   };
 

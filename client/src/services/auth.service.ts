@@ -1,16 +1,18 @@
 "use server";
 
+import { cookies } from "next/headers";
 import { config } from "@/utils/config";
 import axiosInstance from "@/utils/axiosInst";
-import { SignInResponse, SignUpResponse } from "@/interfaces/auth";
+import { SignUpResponse } from "@/interfaces/auth";
+import { AxiosResponseHeaders, RawAxiosResponseHeaders } from "axios";
 
-export async function signIn(email: string, password: string): Promise<string> {
+export const signIn = async (email: string, password: string): Promise<any> => {
   const authData = {
     username: email,
     password: password,
   };
 
-  const { data } = await axiosInstance.post<SignInResponse>(
+  const response = await axiosInstance.post(
     `${config.baseUrl}/auth/login`,
     authData,
     {
@@ -20,39 +22,75 @@ export async function signIn(email: string, password: string): Promise<string> {
     },
   );
 
-  return data.access_token;
-}
+  const token = await parseJwtToken(response.headers);
+  await setupCookies(token);
+};
 
-export async function signUp(
+export const signUp = async (
   email: string,
   username: string,
   password: string,
-): Promise<{ token: string; user: SignUpResponse }> {
+): Promise<SignUpResponse> => {
   const authData = {
     email: email,
     username: username,
     password: password,
-    is_active: true,
-    is_superuser: true,
-    is_verified: true,
   };
 
-  const res = await fetch(`${config.baseUrl}/auth/register`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(authData),
-  });
+  const response = await axiosInstance.post<SignUpResponse>(
+    `${config.baseUrl}/auth/register`,
+    authData,
+    {
+      headers: { "Content-Type": "application/json" },
+    },
+  );
 
-  const result: SignUpResponse = await res.json();
+  if (response.status >= 400) {
+    throw new Error("Invalid response status code: " + response.status);
+  };
 
-  if (res.status === 200 || res.status === 201) {
-    const token = await signIn(email, password);
-    return { token: token, user: result };
-  } else {
-    throw new Error("Failed to sign up");
-  }
+  await signIn(email, password);
+
+  return response.data
 }
 
 export async function logout(): Promise<void> {
-  await axiosInstance.post<SignInResponse>(`${config.baseUrl}/auth/logout`);
+  await removeAuthCookie();
 }
+
+const parseJwtToken = async (
+  headers: RawAxiosResponseHeaders | AxiosResponseHeaders,
+): Promise<string> => {
+  if (!headers["set-cookie"]) {
+    throw new Error("Cookie not found in server response");
+  }
+  const cookieString = headers["set-cookie"][0];
+
+  const cookiesArray = cookieString.split("; ");
+  const targetCookie = cookiesArray.find((cookie) =>
+    cookie.startsWith(`${config.auth.cookieName}=`),
+  );
+
+  if (!targetCookie) {
+    throw new Error("Invalid server cookie");
+  }
+  const token = targetCookie.split("=")[1];
+
+  return token;
+};
+
+const setupCookies = async (token: string): Promise<void> => {
+  const cookieStore = cookies();
+
+  await removeAuthCookie();
+
+  cookieStore.set(config.auth.cookieName, token);
+};
+
+const removeAuthCookie = async (): Promise<void> => {
+  const cookieStore = cookies();
+
+  if (cookieStore.has(config.auth.cookieName)) {
+    cookieStore.delete(config.auth.cookieName);
+  }
+};

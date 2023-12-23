@@ -1,9 +1,5 @@
-export interface SignInResponse {
-  access_token: string;
-  token_type: string;
-}
-
 export interface SignUpResponse {
+  id: string;
   password: string;
   email: string;
   is_active: boolean;

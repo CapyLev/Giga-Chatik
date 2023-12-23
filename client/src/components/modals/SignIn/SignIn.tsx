@@ -3,9 +3,12 @@ import styles from "@/components/modals/Modals.module.scss";
 import * as authService from "@/services/auth.service";
 import { isSignInCredentialsValid } from "@/utils/auth";
 import { ModalProps, AuthValidationState } from "@/interfaces/common";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
+import { Routers } from "@/utils/common";
 
 const SignIn: FC<ModalProps> = ({ closeModal }) => {
+  const router = useRouter();
+
   const [validationError, setValidationError] = useState<
     AuthValidationState["validationError"] | null
   >(null);
@@ -28,9 +31,8 @@ const SignIn: FC<ModalProps> = ({ closeModal }) => {
       setValidationError(validationErrors);
     } else {
       setValidationError(null);
-      const accessToken = await authService.signIn(email, password);
-      localStorage.setItem("token", accessToken);
-      redirect('/home');
+      await authService.signIn(email, password);
+      router.push(Routers.HOME);
     }
   };
 

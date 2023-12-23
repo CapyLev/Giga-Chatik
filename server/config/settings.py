@@ -22,7 +22,7 @@ class ServerSettings(BaseSettings):
     WORKERS: int = cpu_count() * 2 - 1 if ENV_MODE == "prod" else 1
     VERSION: str = "0.0.1"
     SECRET: str = "some ultra secret secret c:"
-    COOKIE_LIFETIME: int = 3600
+    COOKIE_LIFETIME: int = 86400
     LOG_LEVEL: str = "debug"
 
     @property

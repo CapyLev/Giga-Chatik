@@ -12,8 +12,8 @@ class Server(Base):
     id: Mapped[UUID] = mapped_column(
         UUID(as_uuid=True), primary_key=True, default=uuid.uuid4
     )
-    name: Mapped[str] = mapped_column(String(length=70), nullable=False)
-    image: Mapped[str] = mapped_column(String(length=500))
+    name: Mapped[str] = mapped_column(String(length=70))
+    image: Mapped[str] = mapped_column(String(length=500), nullable=True)
     is_public: Mapped[bool] = mapped_column(default=False, index=True)
     password: Mapped[str] = mapped_column(String(length=250), nullable=True)
     admin_id: Mapped[UUID] = mapped_column(

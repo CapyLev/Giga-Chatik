@@ -3,17 +3,20 @@
 import { cookies } from "next/headers";
 import { config } from "@/utils/config";
 import axiosInstance from "@/utils/axiosInst";
-import { SignUpResponse } from "@/interfaces/auth";
+import { SignUpResponse } from "@/interfaces/auth.interfaces";
 import { AxiosResponseHeaders, RawAxiosResponseHeaders } from "axios";
 
-export const signIn = async (email: string, password: string): Promise<any> => {
+export const signIn = async (
+  email: string,
+  password: string,
+): Promise<void> => {
   const authData = {
     username: email,
     password: password,
   };
 
   const response = await axiosInstance.post(
-    `${config.baseUrl}/auth/login`,
+    `${config.baseUrl}/api/auth/login`,
     authData,
     {
       headers: {
@@ -38,7 +41,7 @@ export const signUp = async (
   };
 
   const response = await axiosInstance.post<SignUpResponse>(
-    `${config.baseUrl}/auth/register`,
+    `${config.baseUrl}/api/auth/register`,
     authData,
     {
       headers: { "Content-Type": "application/json" },
@@ -47,12 +50,12 @@ export const signUp = async (
 
   if (response.status >= 400) {
     throw new Error("Invalid response status code: " + response.status);
-  };
+  }
 
   await signIn(email, password);
 
-  return response.data
-}
+  return response.data;
+};
 
 export async function logout(): Promise<void> {
   await removeAuthCookie();

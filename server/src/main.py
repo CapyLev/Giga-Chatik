@@ -35,7 +35,7 @@ def setup_settings(app: FastAPI) -> None:
     )
 
     app.add_event_handler("startup", startup)
-    app.include_router(router=routes)
+    app.include_router(prefix="/api", router=routes)
 
 
 app: FastAPI = start_application()

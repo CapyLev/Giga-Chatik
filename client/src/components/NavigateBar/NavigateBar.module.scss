@@ -21,18 +21,11 @@
 
 .centerSection {
   overflow-y: hidden;
+  overflow-x: hidden;
   flex-grow: 1;
   position: relative;
   margin-top: 10px;
   margin-bottom: 10px;
-}
-
-.Icon {
-  margin: 5px;
-  border-radius: 10px;
-  width: 55px;
-  height: 55px;
-  overflow: hidden;
 }
 
 .serverIcon {

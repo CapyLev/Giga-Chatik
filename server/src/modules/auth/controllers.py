@@ -9,18 +9,18 @@ router = APIRouter()
 
 router.include_router(
     fastapi_users_auth.get_auth_router(auth_backend),
-    prefix="/auth",
+    prefix="",
     tags=["auth"],
 )
 
 router.include_router(
     fastapi_users_auth.get_register_router(UserRead, UserUpdate),
-    prefix="/auth",
+    prefix="",
     tags=["auth"],
 )
 
 router.include_router(
     fastapi_users_auth.get_users_router(UserRead, UserCreate),
-    prefix="/auth",
+    prefix="",
     tags=["auth"],
 )

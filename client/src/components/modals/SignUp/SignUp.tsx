@@ -3,7 +3,10 @@ import { useRouter } from "next/navigation";
 import styles from "@/components/modals/Modals.module.scss";
 import * as authService from "@/services/auth.service";
 import { isSignUpCredentialsValid } from "@/utils/auth";
-import { AuthValidationState, ModalProps } from "@/interfaces/common";
+import {
+  AuthValidationState,
+  ModalProps,
+} from "@/interfaces/common.interfaces";
 
 const SignUp: FC<ModalProps> = ({ closeModal }) => {
   const router = useRouter();
@@ -45,7 +48,7 @@ const SignUp: FC<ModalProps> = ({ closeModal }) => {
       setValidationError(validationErrors);
     } else {
       const user = await authService.signUp(email, username, password);
-      localStorage.setItem('userId', user.id);
+      localStorage.setItem("userId", user.id);
       router.push("/home");
     }
   };

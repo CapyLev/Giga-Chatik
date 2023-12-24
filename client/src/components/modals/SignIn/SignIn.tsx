@@ -2,7 +2,10 @@ import React, { FC, useState } from "react";
 import styles from "@/components/modals/Modals.module.scss";
 import * as authService from "@/services/auth.service";
 import { isSignInCredentialsValid } from "@/utils/auth";
-import { ModalProps, AuthValidationState } from "@/interfaces/common";
+import {
+  ModalProps,
+  AuthValidationState,
+} from "@/interfaces/common.interfaces";
 import { useRouter } from "next/navigation";
 import { Routers } from "@/utils/common";
 

@@ -1,4 +1,4 @@
-import { isOptionalString } from "@/interfaces/common";
+import { isOptionalString } from "@/interfaces/common.interfaces";
 
 const isEmailValid = (email: string): boolean => {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);

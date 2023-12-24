@@ -17,7 +17,8 @@ class IRepository(Generic[M]):
         self.session = session
 
     async def find_by_pk(self, pk: PK) -> Union[M, Exception]:
-        result = await self.session.execute(select(self.model).filter_by(id=pk))
+        query = select(self.model).filter_by(id=pk)
+        result = await self._execute(query)
         instance = result.scalar()
 
         if instance is not None:
@@ -26,7 +27,8 @@ class IRepository(Generic[M]):
             return Exception("Instance not found")
 
     async def find_all(self) -> List[Optional[M]]:
-        result = await self.session.execute(select(self.model))
+        query = select(self.model)
+        result = await self._execute(query)
         return result.scalars().all()
 
     async def create(self, data: Dict[str, Any]) -> M:
@@ -56,5 +58,9 @@ class IRepository(Generic[M]):
             await self.session.commit()
 
     async def find_by_parameters(self, **kwargs) -> List[Optional[M]]:
-        result = await self.session.execute(select(self.model).filter_by(**kwargs))
+        query = select(self.model).filter_by(**kwargs)
+        result = await self._execute(query)
         return result.scalars().all()
+
+    async def _execute(self, query: Any) -> Any:
+        return await self.session.execute(query)

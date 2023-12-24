@@ -1,6 +1,5 @@
-from dataclasses import dataclass
 from datetime import datetime
-from typing import Optional
+from pydantic.dataclasses import dataclass
 
 
 @dataclass(frozen=True, slots=True)

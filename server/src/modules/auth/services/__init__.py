@@ -1,1 +1,1 @@
-from .services import user_service
+from .services import current_active_user

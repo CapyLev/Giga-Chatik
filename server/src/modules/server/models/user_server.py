@@ -13,7 +13,7 @@ class UserServer(Base):
     server_id: Mapped[UUID] = mapped_column(
         ForeignKey("server.id", ondelete="SET NULL")
     )
-    created_at: Mapped[datetime] = mapped_column(TIMESTAMP, default=datetime.utcnow())
+    created_at: Mapped[datetime] = mapped_column(TIMESTAMP, default=datetime.now())
 
     user: Mapped["User"] = relationship(back_populates="user_servers")
     server: Mapped["Server"] = relationship(back_populates="user_servers")

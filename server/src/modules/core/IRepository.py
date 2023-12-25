@@ -1,9 +1,11 @@
 from typing import Any, Dict, Generic, List, Optional, TypeVar, Union
-from sqlalchemy import select
 
+from sqlalchemy import select
+from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from config.database.base import Base
+from src.modules.server.models import UserServer
 
 PK = TypeVar("PK")
 M = TypeVar("M", bound=Base)
@@ -16,15 +18,17 @@ class IRepository(Generic[M]):
         self.model = model
         self.session = session
 
-    async def find_by_pk(self, pk: PK) -> Union[M, Exception]:
+    async def find_by_pk(self, pk: PK, raise_error: bool = False) -> Union[M, bool]:
         query = select(self.model).filter_by(id=pk)
         result = await self._execute(query)
         instance = result.scalar()
 
         if instance is not None:
             return instance
+        elif raise_error:
+            raise NoResultFound("Instance not found")
         else:
-            return Exception("Instance not found")
+            return False
 
     async def find_all(self) -> List[Optional[M]]:
         query = select(self.model)
@@ -32,6 +36,8 @@ class IRepository(Generic[M]):
         return result.scalars().all()
 
     async def create(self, data: Dict[str, Any]) -> M:
+        # instance = UserServer(**kwargs)
+        print(data)
         instance = self.model(**data)
         self.session.add(instance)
         await self.session.commit()

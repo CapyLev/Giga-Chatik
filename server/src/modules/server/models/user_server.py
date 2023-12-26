@@ -6,7 +6,7 @@ from config.database import Base
 
 
 class UserServer(Base):
-    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
+    id: Mapped[int] = mapped_column(primary_key=True)
     user_id: Mapped[UUID] = mapped_column(
         ForeignKey("user.id", ondelete="SET NULL"), index=True
     )

@@ -21,3 +21,10 @@ class ServerImageDTO(BaseModel):
 
 class JoinServerRequest(BaseModel):
     password: Optional[str]
+
+
+class EditServerRequest(BaseModel):
+    name: Optional[str]
+    password: Optional[str]
+    image: Optional[HttpUrl]
+    is_public: Optional[bool]

@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import Optional
 
-from pydantic import BaseModel, UUID4, HttpUrl
+from pydantic import BaseModel, UUID4, HttpUrl, constr
 
 
 class ServerDTO(BaseModel):
@@ -24,7 +24,7 @@ class JoinServerRequest(BaseModel):
 
 
 class EditServerRequest(BaseModel):
-    name: Optional[str]
-    password: Optional[str]
-    image: Optional[HttpUrl]
+    name: Optional[constr(max_length=70)]
+    password: Optional[constr(max_length=250)]
+    image: Optional[str]
     is_public: Optional[bool]

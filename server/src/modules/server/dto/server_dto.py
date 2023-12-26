@@ -17,3 +17,7 @@ class ServerDTO(BaseModel):
 class ServerImageDTO(BaseModel):
     id: UUID4
     image: Optional[HttpUrl]
+
+
+class JoinServerRequest(BaseModel):
+    password: Optional[str]

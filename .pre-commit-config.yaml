@@ -3,10 +3,15 @@ repos:
     rev: v3.2.0
     hooks:
     -   id: trailing-whitespace
+        files: ^server/(src|config)/
     -   id: end-of-file-fixer
+        files: ^server/(src|config)/
     -   id: check-yaml
+        files: ^server/(src|config)/
     -   id: check-added-large-files
+        files: ^server/(src|config)/
 -   repo: https://github.com/psf/black
     rev: 22.10.0
     hooks:
     -   id: black
+        files: ^server/(src|config)/

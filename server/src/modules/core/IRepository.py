@@ -36,8 +36,6 @@ class IRepository(Generic[M]):
         return result.scalars().all()
 
     async def create(self, data: Dict[str, Any]) -> M:
-        # instance = UserServer(**kwargs)
-        print(data)
         instance = self.model(**data)
         self.session.add(instance)
         await self.session.commit()

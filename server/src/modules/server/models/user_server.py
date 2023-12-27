@@ -1,5 +1,6 @@
 from datetime import datetime
-from sqlalchemy import TIMESTAMP, ForeignKey, UUID
+
+from sqlalchemy import TIMESTAMP, UUID, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from config.database import Base

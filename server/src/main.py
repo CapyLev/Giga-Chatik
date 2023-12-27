@@ -2,8 +2,8 @@ import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from config.settings import settings
 from config.mongo import mongo_db_connection
+from config.settings import settings
 
 from .modules.router import routes
 

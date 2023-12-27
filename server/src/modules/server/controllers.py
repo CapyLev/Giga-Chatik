@@ -1,26 +1,25 @@
 import logging
-from typing import List, Dict
+from typing import Dict, List
 
-from fastapi import APIRouter, Depends, status, Response
+from fastapi import APIRouter, Depends, Response, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from config.database.utils import get_async_session
-
 from src.modules.auth.entity import UserEntity
 from src.modules.auth.services import current_active_user
 
+from .dto import EditServerRequest, JoinServerRequest, ServerImageDTO, UserServerDTO
 from .services import (
+    DeleteUserServerService,
+    EditServerSettingsService,
     GetServersByUserIdService,
     JoinToServerService,
-    EditServerSettingsService,
-    DeleteUserServerService,
 )
-from .dto import JoinServerRequest, EditServerRequest, ServerImageDTO, UserServerDTO
 from .utils.errors import (
-    UserAlreadyExistsOnThisServer,
-    ServerPasswordRequired,
-    ServerPasswordInvalid,
     ServerNotFound,
+    ServerPasswordInvalid,
+    ServerPasswordRequired,
+    UserAlreadyExistsOnThisServer,
     UserIsNotAdminException,
 )
 

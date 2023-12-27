@@ -1,4 +1,4 @@
-from typing import Union, Never
+from typing import Never, Union
 
 from sqlalchemy.ext.asyncio import AsyncSession
 

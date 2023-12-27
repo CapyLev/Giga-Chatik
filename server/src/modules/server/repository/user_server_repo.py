@@ -1,9 +1,10 @@
 from typing import List
-from sqlalchemy import select
-from sqlalchemy.orm import joinedload
-from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.modules.core.IRepository import M, IRepository
+from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import joinedload
+
+from src.modules.core.IRepository import IRepository, M
 
 from ..models import UserServer
 

@@ -1,5 +1,6 @@
 from datetime import datetime
 from typing import List
+
 from bson import ObjectId
 
 from config.mongo import Base

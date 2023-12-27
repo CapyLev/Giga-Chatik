@@ -2,9 +2,9 @@ from typing import Optional
 
 from fastapi_users.schemas import (
     BaseUser,
+    BaseUserUpdate,
     CreateUpdateDictModel,
     models,
-    BaseUserUpdate,
 )
 from pydantic import EmailStr
 

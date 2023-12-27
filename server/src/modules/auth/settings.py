@@ -1,14 +1,16 @@
 import uuid
+
 from fastapi_users import FastAPIUsers
 from fastapi_users.authentication import (
     AuthenticationBackend,
     CookieTransport,
     JWTStrategy,
 )
-from .manager import get_user_manager
-from .models import User
 
 from config.settings import settings
+
+from .manager import get_user_manager
+from .models import User
 
 cookie_transport = CookieTransport(
     cookie_name="4atik", cookie_max_age=settings.server.COOKIE_LIFETIME

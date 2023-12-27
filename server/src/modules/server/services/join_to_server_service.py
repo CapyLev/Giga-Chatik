@@ -4,7 +4,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from ..dto import ServerDTO, UserServerDTO
 from ..models import UserServer
-from ..repository import get_user_server_repo, get_server_repo
+from ..repository import get_server_repo, get_user_server_repo
 from ..utils.errors import (
     ServerNotFound,
     ServerPasswordInvalid,

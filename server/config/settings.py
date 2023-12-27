@@ -1,16 +1,8 @@
 from multiprocessing import cpu_count
-from typing import Any, Dict, List
+from typing import Any, Dict
 
+from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
-from pydantic import (
-    AliasChoices,
-    AmqpDsn,
-    BaseModel,
-    Field,
-    ImportString,
-    PostgresDsn,
-    RedisDsn,
-)
 
 
 class ServerSettings(BaseSettings):

@@ -1,6 +1,6 @@
 import uuid
-from typing import List
 from datetime import datetime
+from typing import List
 
 from sqlalchemy import TIMESTAMP, UUID, ForeignKey, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship

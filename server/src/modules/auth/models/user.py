@@ -1,10 +1,10 @@
+import uuid
 from datetime import datetime
 from typing import List, Optional
-import uuid
 
 from fastapi_users_db_sqlalchemy import SQLAlchemyBaseUserTableUUID
 from fastapi_users_db_sqlalchemy.generics import GUID
-from sqlalchemy import TIMESTAMP, Boolean, String, UUID
+from sqlalchemy import TIMESTAMP, UUID, Boolean, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from config.database import Base

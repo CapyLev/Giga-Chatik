@@ -1,15 +1,12 @@
 from typing import Never, Union
 
-from sqlalchemy.ext.asyncio import AsyncSession
-
 from ..dto import EditServerRequest, ServerDTO
-from ..repository import get_server_repo
 from ..utils.errors import ServerNotFound, UserIsNotAdminException
 
 
 class EditServerSettingsService:
-    def __init__(self, session: AsyncSession) -> None:
-        self.server_repo = get_server_repo(session)
+    def __init__(self, server_repo: ServerRepository) -> None:
+        self.server_repo = server_repo
 
     async def _is_server_exist(self, server_id: str) -> Union[ServerDTO, Never]:
         server = await self.server_repo.find_by_pk(server_id)

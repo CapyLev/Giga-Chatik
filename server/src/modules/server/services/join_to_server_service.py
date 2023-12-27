@@ -1,10 +1,8 @@
 from typing import Never, Union
 
-from sqlalchemy.ext.asyncio import AsyncSession
-
 from ..dto import ServerDTO, UserServerDTO
 from ..models import UserServer
-from ..repository import get_server_repo, get_user_server_repo
+from ..repository import ServerRepository, UserServerRepository
 from ..utils.errors import (
     ServerNotFound,
     ServerPasswordInvalid,
@@ -14,9 +12,9 @@ from ..utils.errors import (
 
 
 class JoinToServerService:
-    def __init__(self, session: AsyncSession) -> None:
-        self.server_repo = get_server_repo(session)
-        self.user_server_repo = get_user_server_repo(session)
+    def __init__(self, server_repo: ServerRepository, user_server_repo: UserServerRepository) -> None:
+        self.server_repo = server_repo
+        self.user_server_repo = user_server_repo
 
     async def _is_server_exist(self, server_id: str) -> Union[ServerDTO, Never]:
         server = await self.server_repo.find_by_pk(server_id)

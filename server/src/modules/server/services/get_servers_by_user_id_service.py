@@ -1,14 +1,12 @@
 from typing import List
 
-from sqlalchemy.ext.asyncio import AsyncSession
-
 from ..dto import ServerImageDTO, UserServerDTO
-from ..repository import get_user_server_repo
+from ..repository import UserServerRepository
 
 
 class GetServersByUserIdService:
-    def __init__(self, session: AsyncSession) -> None:
-        self.user_server_repo = get_user_server_repo(session)
+    def __init__(self, user_server_repo: UserServerRepository) -> None:
+        self.user_server_repo = user_server_repo
 
     async def _collect_user_servers_by_user_id(
         self, user_id: str

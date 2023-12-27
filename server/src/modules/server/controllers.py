@@ -7,8 +7,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from config.database.utils import get_async_session
 from src.modules.auth.entity import UserEntity
 from src.modules.auth.services import current_active_user
-
 from .dto import EditServerRequest, JoinServerRequest, ServerImageDTO, UserServerDTO
+from .repository import get_user_server_repo, get_server_repo
 from .services import (
     DeleteUserServerService,
     EditServerSettingsService,
@@ -36,7 +36,8 @@ async def get_user_servers(
     user: UserEntity = Depends(current_active_user),
     session: AsyncSession = Depends(get_async_session),
 ):
-    service = GetServersByUserIdService(session)
+    user_server_repo = get_user_server_repo(session)
+    service = GetServersByUserIdService(user_server_repo)
     result = await service.execute(user.id)
     return {"result": result}
 
@@ -48,7 +49,9 @@ async def join_to_server(
     user: UserEntity = Depends(current_active_user),
     session: AsyncSession = Depends(get_async_session),
 ):
-    service = JoinToServerService(session)
+    user_server_repo = get_user_server_repo(session)
+    server_repo = get_server_repo(session)
+    service = JoinToServerService(server_repo, user_server_repo)
     try:
         result = await service.execute(
             server_id, str(user.id), join_request_data.password
@@ -72,7 +75,8 @@ async def edit_server_settings(
     user: UserEntity = Depends(current_active_user),
     session: AsyncSession = Depends(get_async_session),
 ):
-    service = EditServerSettingsService(session)
+    server_repo = get_server_repo(session)
+    service = EditServerSettingsService(server_repo)
     try:
         result = await service.execute(
             server_id, str(user.id), edit_server_request_data
@@ -90,7 +94,8 @@ async def delete_server(
     user: UserEntity = Depends(current_active_user),
     session: AsyncSession = Depends(get_async_session),
 ):
-    service = DeleteUserServerService(session)
+    server_repo = get_server_repo(session)
+    service = DeleteUserServerService(server_repo)
     try:
         _ = await service.execute(server_id, str(user.id))
     except UserIsNotAdminException as exc:

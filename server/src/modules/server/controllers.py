@@ -7,13 +7,20 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from config.database.utils import get_async_session
 from src.modules.auth.entity import UserEntity
 from src.modules.auth.services import current_active_user
-from .dto import EditServerRequest, JoinServerRequest, ServerImageDTO, UserServerDTO
+from .dto import (
+    EditServerRequest,
+    JoinServerRequest,
+    ServerImageDTO,
+    UserServerDTO,
+    CreateServerRequest,
+)
 from .repository import get_user_server_repo, get_server_repo
 from .services import (
     DeleteUserServerService,
     EditServerSettingsService,
     GetServersByUserIdService,
     JoinToServerService,
+    CreateServerService,
 )
 from .utils.errors import (
     ServerNotFound,
@@ -103,3 +110,16 @@ async def delete_server(
             content={"msg": str(exc)}, status_code=status.HTTP_403_FORBIDDEN
         )
     return Response(status_code=status.HTTP_200_OK)
+
+
+@router.post("", response_model=CreateServerRequest, status_code=status.HTT)
+async def create_server(
+    create_server_request_data: CreateServerRequest,
+    user: UserEntity = Depends(current_active_user),
+    session: AsyncSession = Depends(get_async_session),
+):
+    server_repo = get_server_repo(session)
+    user_server_repo = get_user_server_repo(session)
+    service = CreateServerService(server_repo, user_server_repo)
+    result = await service.execute(str(user.id), create_server_request_data)
+    return result

@@ -1,5 +1,6 @@
 from typing import Never, Union
 
+from ..repository import ServerRepository
 from ..dto import EditServerRequest, ServerDTO
 from ..utils.errors import ServerNotFound, UserIsNotAdminException
 

@@ -48,12 +48,10 @@ class MongoSettings(BaseSettings):
     COLLECTION: str = Field("msgStorage", validation_alias="MONGO_INITDB_COLLECTION")
     HOST: str = Field("mongodb", validation_alias="MONGO_INITDB_HOST")
     PORT: int = Field("27017", validation_alias="MONGO_INITDB_PORT")
-    USER: str = Field("mongodb_user", validation_alias="MONGO_INITDB_ROOT_USERNAME")
-    PASS: str = Field("mongodb_pass", validation_alias="MONGO_INITDB_ROOT_PASSWORD")
 
     @property
     def MONGO_URL(self) -> str:
-        return f"mongodb://{self.USER}:{self.PASS}@{self.HOST}:{self.PORT}"
+        return f"mongodb://{self.HOST}:{self.PORT}"
 
 
 class Settings(BaseSettings):

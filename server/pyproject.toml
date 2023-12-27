@@ -33,6 +33,14 @@ build-backend = "poetry.core.masonry.api"
 [tool.ruff.lint]
 select = ["E", "F"]
 ignore = ["F821"]
+exclude = [
+    ".git",
+    "__pycache__",
+    "__init__.py",
+    ".venv",
+    ".env",
+    "migrations",
+]
 
 [tool.isort]
 profile = "black"

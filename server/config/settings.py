@@ -51,7 +51,7 @@ class MongoSettings(BaseSettings):
 
     @property
     def MONGO_URL(self) -> str:
-        return f"mongodb://{self.HOST}:{self.PORT}"
+        return f"mongodb://{self.HOST}:{self.PORT}"  # FIXME: add user and password
 
 
 class Settings(BaseSettings):

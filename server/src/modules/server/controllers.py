@@ -112,7 +112,11 @@ async def delete_server(
     return Response(status_code=status.HTTP_200_OK)
 
 
-@router.post("", response_model=CreateServerRequest, status_code=status.HTT)
+@router.post(
+    "",
+    # response_model=CreateServerRequest,
+    status_code=status.HTTP_201_CREATED,
+)
 async def create_server(
     create_server_request_data: CreateServerRequest,
     user: UserEntity = Depends(current_active_user),

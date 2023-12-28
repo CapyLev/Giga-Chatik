@@ -12,7 +12,9 @@ from ..utils.errors import (
 
 
 class JoinToServerService:
-    def __init__(self, server_repo: ServerRepository, user_server_repo: UserServerRepository) -> None:
+    def __init__(
+        self, server_repo: ServerRepository, user_server_repo: UserServerRepository
+    ) -> None:
         self.server_repo = server_repo
         self.user_server_repo = user_server_repo
 

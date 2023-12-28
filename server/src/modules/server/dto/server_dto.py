@@ -33,6 +33,5 @@ class EditServerRequest(BaseModel):
 class CreateServerRequest(BaseModel):
     name: str
     image: Optional[HttpUrl]
-    is_public: Optional[bool] = False
+    is_public: bool = False
     password: Optional[str] = None
-    admin_id: Optional[UUID4] = None

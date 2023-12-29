@@ -57,7 +57,7 @@ class IRepository(Generic[M]):
         instance = await self.find_by_pk(pk)
 
         if isinstance(instance, self.model):
-            self.session.delete(instance)
+            await self.session.delete(instance)
             await self.session.commit()
 
     async def find_by_parameters(self, **kwargs) -> List[Optional[M]]:

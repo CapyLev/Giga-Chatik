@@ -4,15 +4,17 @@ from ..dto import ServerDTO, UserServerDTO
 from ..models import UserServer
 from ..repository import ServerRepository, UserServerRepository
 from ..utils.errors import (
-    ServerNotFound,
-    ServerPasswordInvalid,
-    ServerPasswordRequired,
-    UserAlreadyExistsOnThisServer,
+    ServerNotFoundException,
+    ServerPasswordInvalidException,
+    ServerPasswordRequiredException,
+    UserAlreadyExistsOnThisServerException,
 )
 
 
 class JoinToServerService:
-    def __init__(self, server_repo: ServerRepository, user_server_repo: UserServerRepository) -> None:
+    def __init__(
+        self, server_repo: ServerRepository, user_server_repo: UserServerRepository
+    ) -> None:
         self.server_repo = server_repo
         self.user_server_repo = user_server_repo
 
@@ -20,7 +22,7 @@ class JoinToServerService:
         server = await self.server_repo.find_by_pk(server_id)
 
         if not server:
-            raise ServerNotFound()
+            raise ServerNotFoundException()
 
         return server
 
@@ -45,19 +47,19 @@ class JoinToServerService:
 
         if not server.is_public:
             if not password:
-                raise ServerPasswordRequired()
+                raise ServerPasswordRequiredException()
 
             is_password_valid = await self._validate_private_server_password(password)
 
             if not is_password_valid:
-                raise ServerPasswordInvalid()
+                raise ServerPasswordInvalidException()
 
         is_user_already_on_server = await self._is_user_already_on_server(
             server_id, user_id
         )
 
         if is_user_already_on_server:
-            raise UserAlreadyExistsOnThisServer()
+            raise UserAlreadyExistsOnThisServerException()
 
         result = await self._connect_user_to_server(server_id, user_id)
 

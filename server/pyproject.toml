@@ -39,7 +39,7 @@ exclude = [
     "__init__.py",
     ".venv",
     ".env",
-    "migrations",
+    "migrations/env.py",
 ]
 
 [tool.isort]

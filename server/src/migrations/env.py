@@ -8,6 +8,8 @@ from sqlalchemy.ext.asyncio import async_engine_from_config
 
 from config.database import Base
 from config.settings import settings
+from src.modules.auth.models import User, UserProfile  # noqa
+from src.modules.server.models import Server, UserServer  # noqa
 
 config = context.config
 

@@ -1,7 +1,7 @@
 """add server and user
 
 Revision ID: e2e11380bdba
-Revises: 
+Revises:
 Create Date: 2023-12-23 23:12:22.383764
 
 """
@@ -70,7 +70,7 @@ def upgrade() -> None:
         ),
         sa.Column("server_id", sa.UUID(), nullable=False),
         sa.Column("created_at", sa.TIMESTAMP(), nullable=False),
-        sa.ForeignKeyConstraint(["server_id"], ["server.id"], ondelete="SET NULL"),
+        sa.ForeignKeyConstraint(["server_id"], ["server.id"], ondelete="CASCADE"),
         sa.ForeignKeyConstraint(["user_id"], ["user.id"], ondelete="SET NULL"),
         sa.PrimaryKeyConstraint("id"),
     )

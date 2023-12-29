@@ -1,8 +1,8 @@
 from typing import Never, Union
 
+from ..dto import EditServerRequestDTO, ServerDTO
 from ..repository import ServerRepository
-from ..dto import EditServerRequest, ServerDTO
-from ..utils.errors import ServerNotFound, UserIsNotAdminException
+from ..utils.errors import ServerNotFoundException, UserIsNotAdminExceptionException
 
 
 class EditServerSettingsService:
@@ -13,7 +13,7 @@ class EditServerSettingsService:
         server = await self.server_repo.find_by_pk(server_id)
 
         if not server:
-            raise ServerNotFound()
+            raise ServerNotFoundException()
 
         return server
 
@@ -21,18 +21,21 @@ class EditServerSettingsService:
         return True if server_admin_id == user_id else False
 
     async def execute(
-        self, server_id: str, user_id: str, edit_server_request_data: EditServerRequest
+        self,
+        server_id: str,
+        user_id: str,
+        edit_server_request_data: EditServerRequestDTO,
     ):
         server = await self._is_server_exist(server_id)
 
         if await self._check_if_user_is_admin(server.admin_id, user_id):
-            raise UserIsNotAdminException()
+            raise UserIsNotAdminExceptionException()
 
         updated_instance = await self.server_repo.update(
             server_id, edit_server_request_data.dict()
         )
 
-        return EditServerRequest(
+        return EditServerRequestDTO(
             name=updated_instance.name,
             password=updated_instance.password,
             image=updated_instance.image,

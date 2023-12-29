@@ -10,3 +10,8 @@ class UserServerDTO(BaseModel):
     user_id: UUID4
     created_at: datetime
     server: ServerDTO
+
+
+class UserServerCreateDTO(BaseModel):
+    user_id: str
+    server_id: str

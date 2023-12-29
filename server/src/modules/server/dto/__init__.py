@@ -1,8 +1,9 @@
 from .server_dto import (
     ServerDTO,
     ServerImageDTO,
-    JoinServerRequest,
-    EditServerRequest,
-    CreateServerRequest,
+    JoinServerRequestDTO,
+    EditServerRequestDTO,
+    CreateServerRequestDTO,
+    CreateServerDTO,
 )
-from .user_server_dto import UserServerDTO
+from .user_server_dto import UserServerDTO, UserServerCreateDTO

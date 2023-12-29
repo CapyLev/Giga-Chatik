@@ -1,7 +1,8 @@
-from typing import Dict
+from src.modules.core.utils.hasher import Hasher
 
-from ..dto import CreateServerRequest
+from ..dto import CreateServerRequestDTO, CreateServerDTO, UserServerCreateDTO
 from ..repository import ServerRepository, UserServerRepository
+from ..utils.errors import PasswordIsRequiredException
 
 
 class CreateServerService:
@@ -12,39 +13,52 @@ class CreateServerService:
         self.user_server_repo = user_server_repo
 
     async def _get_default_image(self) -> str:
-        return ""  # TODO: Get some default image
+        # TODO: Get some default image
+        return "https://inspirationseek.com/wp-content/uploads/2016/02/Cute-Alaskan-Dog.jpg"
 
-    async def _validate_server_data(
-        self, user_id: str, create_server_request_data: CreateServerRequest
-    ) -> Dict[str, str]:
-        updated_data = create_server_request_data.dict()
-        updated_data.update({"admin_id": user_id})
+    async def _get_hashed_password(self, password: str) -> str:
+        if not password:
+            raise PasswordIsRequiredException()
 
-        if not updated_data["image"]:
-            updated_data["image"] = await self._get_default_image()
-        else:
-            updated_data["image"] = str(updated_data["image"])
+        return await Hasher.hash_password(password)
 
-        return updated_data
+    async def _get_create_data(
+        self, request_data: CreateServerRequestDTO, admin_id: str
+    ) -> CreateServerDTO:
+        return CreateServerDTO(
+            name=request_data.name,
+            image=request_data.image,
+            is_public=request_data.is_public,
+            password=request_data.password,
+            admin_id=admin_id,
+        )
 
     async def _get_user_server_data(
         self, user_id: str, server_id: str
-    ) -> Dict[str, str]:
-        return {"user_id": user_id, "server_id": server_id}
+    ) -> UserServerCreateDTO:
+        return UserServerCreateDTO(user_id=user_id, server_id=server_id)
 
     async def execute(
-        self, user_id: str, create_server_request_data: CreateServerRequest
-    ) -> CreateServerRequest:
-        server_data = await self._validate_server_data(
-            user_id, create_server_request_data
-        )
+        self, user_id: str, request_data: CreateServerRequestDTO
+    ) -> CreateServerDTO:
+        if not request_data.is_public:
+            request_data.password = await self._get_hashed_password(
+                request_data.password
+            )
 
-        result = await self.server_repo.create(server_data)
+        request_data.image = await self._get_default_image()
 
-        user_server_data = await self._get_user_server_data(user_id, result.id)
+        create_server_data = await self._get_create_data(request_data, user_id)
 
-        _ = await self.user_server_repo.create(user_server_data)
+        server = await self.server_repo.create(create_server_data.dict())
 
-        return CreateServerRequest(
-            name=result.name, image=result.image, is_public=result.is_public
+        user_server_data = await self._get_user_server_data(user_id, str(server.id))
+        _ = await self.user_server_repo.create(user_server_data.dict())
+
+        return CreateServerDTO(
+            name=server.name,
+            image=server.image,
+            is_public=server.is_public,
+            password=None,
+            admin_id=server.admin_id,
         )

@@ -9,15 +9,15 @@ from .modules.router import routes
 
 
 def start_application() -> FastAPI:
-    app = FastAPI(
+    application = FastAPI(
         title=settings.server.NAME,
         version=settings.server.VERSION,
-        **settings.server.fastapi_kwargs
+        **settings.server.fastapi_kwargs,
     )
 
-    setup_settings(app)
+    setup_settings(application)
 
-    return app
+    return application
 
 
 async def startup():

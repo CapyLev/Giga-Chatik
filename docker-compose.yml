@@ -30,7 +30,13 @@ services:
     build:
       context: ./server
       dockerfile: ./Dockerfile
+      target: dev
     container_name: 4atik
+    command: >
+      sh -c "
+        alembic upgrade head &&
+        python -m src.main
+      "
     restart: always
     ports:
       - '6969:6969'
@@ -42,10 +48,21 @@ services:
     networks:
       - chatik-network
 
+  nginx:
+    build:
+      context: ./nginx
+      dockerfile: ./Dockerfile
+      target: dev
+    container_name: nginx
+    restart: always
+    ports:
+      - '80:8080'
+    networks:
+      - chatik-network
+
 volumes:
   pg_data:
   mongodb_data:
-
 
 networks:
   chatik-network:

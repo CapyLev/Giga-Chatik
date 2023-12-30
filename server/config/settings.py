@@ -7,7 +7,6 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 class ServerSettings(BaseSettings):
     NAME: str = "auth"
-    DEBUG: bool = True
     ENV_MODE: str = "dev"
     HOST: str = "0.0.0.0"
     PORT: int = "6969"
@@ -20,11 +19,10 @@ class ServerSettings(BaseSettings):
     @property
     def fastapi_kwargs(self) -> Dict[str, Any]:
         return {
-            "debug": self.DEBUG,
-            "docs_url": None if self.ENV_MODE != "dev" else "/docs",
             "openapi_prefix": "",
+            "redoc_url": None,
+            "docs_url": None if self.ENV_MODE != "dev" else "/docs",
             "openapi_url": None if self.ENV_MODE != "dev" else "/openapi.json",
-            "redoc_url": None if self.ENV_MODE != "dev" else "/redoc",
             "openapi_tags": None
             if self.ENV_MODE != "dev"
             else [{"name": "monitor", "description": "uptime monitor endpoints"}],

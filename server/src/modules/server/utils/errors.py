@@ -1,29 +1,26 @@
-from src.modules.core.IException import IException
-
-
-class ServerNotFoundException(IException):
+class ServerNotFoundException(Exception):
     def __init__(self) -> None:
         super().__init__("Could not find server. Check your server id.")
 
 
-class ServerPasswordRequiredException(IException):
+class ServerPasswordRequiredException(Exception):
     def __init__(
         self,
     ) -> None:
         super().__init__("Password is required for this server.")
 
 
-class ServerPasswordInvalidException(IException):
+class ServerPasswordInvalidException(Exception):
     def __init__(self) -> None:
         super().__init__("Wrong server password provided.")
 
 
-class UserAlreadyExistsOnThisServerException(IException):
+class UserAlreadyExistsOnThisServerException(Exception):
     def __init__(self) -> None:
         super().__init__("You are already a member of this server.")
 
 
-class UserIsNotAdminExceptionException(IException):
+class UserIsNotAdminExceptionException(Exception):
     def __init__(self) -> None:
         super().__init__("You are not allowed to edit this server")
 

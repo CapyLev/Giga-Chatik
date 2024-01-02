@@ -26,6 +26,17 @@ services:
     networks:
       - chatik-network
 
+  redis:
+    image: redis:7
+    container_name: redis
+    restart: always
+    volumes:
+        - ./redis_data:/data
+        - ./redis/redis.conf:/usr/local/etc/redis/redis.conf
+    expose:
+        - 9456
+    command: redis-server /usr/local/etc/redis/redis.conf
+
   server:
     build:
       context: ./server
@@ -63,6 +74,7 @@ services:
 volumes:
   pg_data:
   mongodb_data:
+  redis_data:
 
 networks:
   chatik-network:

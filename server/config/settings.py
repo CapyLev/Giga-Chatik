@@ -52,12 +52,22 @@ class MongoSettings(BaseSettings):
         return f"mongodb://{self.HOST}:{self.PORT}"  # FIXME: add user and password
 
 
+class RedisSettings(BaseSettings):
+    HOST: str = Field("redis", validation_alias="REDIS_HOST")
+    PASSWORD: str = Field("password", validation_alias="REDIS_PASSWORD")
+
+    @property
+    def REDIS_URL(self) -> str:
+        return f"redis://{self.HOST}"
+
+
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file=".env")
 
     server: ServerSettings = ServerSettings()
     database: DatabaseSettings = DatabaseSettings()
     mongo: MongoSettings = MongoSettings()
+    redis: RedisSettings = RedisSettings()
 
 
 settings = Settings()

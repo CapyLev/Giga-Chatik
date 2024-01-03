@@ -1,1 +1,1 @@
-from .redis import redis_connection
+from .redis import redis_client, RedisSessionType

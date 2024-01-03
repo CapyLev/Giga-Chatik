@@ -3,7 +3,6 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from config.mongo import mongo_db_connection
-from config.redis import redis_connection
 from config.settings import settings
 
 from .modules.router import routes
@@ -23,7 +22,6 @@ def start_application() -> FastAPI:
 
 async def startup():
     await mongo_db_connection.init_mongo_db()
-    await redis_connection.init_redis()
 
 
 def setup_settings(app: FastAPI) -> None:

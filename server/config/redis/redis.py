@@ -1,31 +1,32 @@
+from enum import Enum
+from typing import AsyncGenerator
+
 from aioredis import from_url, Redis
 
 from ..settings import settings
 
 
-class RedisConnector:
-    _redis = None
+class RedisSessionType(Enum):
+    MSG_TEMPORARY_STORAGE = 0
+    CACHE_STORAGE = 1
 
-    async def init_redis(self) -> None:
-        if not self._redis:
-            self._redis = await from_url(
+
+class RedisClient:
+    async def get_redis_session_by_type(
+        self, session_type: RedisSessionType = RedisSessionType.MSG_TEMPORARY_STORAGE
+    ) -> AsyncGenerator[Redis, None, None]:
+        try:
+            _redis = await from_url(
                 settings.redis.REDIS_URL,
-                password=settings.redis.PASSWORD,
                 encoding="utf-8",
                 decode_responses=True,
+                db=session_type.value,
             )
-
-    async def close_redis(self) -> None:
-        if self._redis:
-            self._redis.close()
-            await self._redis.wait_closed()
-
-    async def get_redis_session(self) -> Redis:
-        try:
-            await self.init_redis()
-            yield self._redis
+            async with _redis.client() as session:
+                yield session
         finally:
-            await self.close_redis()
+            session.close()
+            await session.wait_closed()
 
 
-redis_connection: RedisConnector = RedisConnector()
+redis_client: RedisClient = RedisClient()

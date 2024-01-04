@@ -9,7 +9,7 @@ from src.modules.server.utils.errors import ServerNotFoundException
 from src.modules.auth.services import current_active_user
 from src.modules.auth.entity import UserEntity
 
-from .manager import Manager
+from .managers import connection_singlton_manager
 from .services import VerifyWSConnectionService
 
 
@@ -35,13 +35,13 @@ async def chat_communication(
             content={"msg": str(exc)}, status_code=status.HTTP_400_BAD_REQUEST
         )
 
-    await Manager.connect(websocket, server_id, str(user.id))
+    await connection_singlton_manager.connect(websocket, server_id, str(user.id))
 
     try:
         while True:
             data = await websocket.receive_text()
-            await Manager.send_personal_message(f"You wrote: {data}", websocket)
-            await Manager.broadcast(f"Client #{client_id} says: {data}")
+            await connection_singlton_manager.broadcast(
+                f"Client #{str(user.id)} says: {data}"
+            )
     except WebSocketDisconnect:
-        Manager.disconnect(websocket)
-        await Manager.broadcast(f"Client #{client_id} left the chat")
+        connection_singlton_manager.disconnect(server_id, str(user.id))

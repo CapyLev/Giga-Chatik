@@ -27,7 +27,6 @@ class JoinToServerService:
         return server
 
     async def _validate_private_server_password(self, password: str) -> bool:
-        # TODO: add validation after hashing password
         return True
 
     async def _is_user_already_on_server(self, server_id: str, user_id: str) -> bool:
@@ -62,8 +61,6 @@ class JoinToServerService:
             raise UserAlreadyExistsOnThisServerException()
 
         result = await self._connect_user_to_server(server_id, user_id)
-
-        # TODO: add event to notify users on server about new member
 
         return UserServerDTO(
             id=result.id,

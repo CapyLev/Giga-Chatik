@@ -13,7 +13,6 @@ class CreateServerService:
         self.user_server_repo = user_server_repo
 
     async def _get_default_image(self) -> str:
-        # TODO: Get some default image
         return "https://inspirationseek.com/wp-content/uploads/2016/02/Cute-Alaskan-Dog.jpg"
 
     async def _get_hashed_password(self, password: str) -> str:

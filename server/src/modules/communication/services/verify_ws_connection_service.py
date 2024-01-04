@@ -1,3 +1,4 @@
+from typing import Never, Union
 from src.modules.server.utils.errors import ServerNotFoundException
 from src.modules.server.repository import ServerRepository, UserServerRepository
 
@@ -22,7 +23,7 @@ class VerifyWSConnectionService:
 
         return False
 
-    async def execute(self, user_id: str, server_id: str) -> bool:
+    async def execute(self, user_id: str, server_id: str) -> Union[None, Never]:
         if not await self._check_if_server_exist(server_id):
             raise ServerNotFoundException()
 

@@ -20,4 +20,4 @@ class ConnectionManager:
             await connection.send_text(message)
 
 
-manager = ConnectionManager()
+Manager = ConnectionManager()

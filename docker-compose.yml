@@ -27,15 +27,17 @@ services:
       - chatik-network
 
   redis:
-    image: redis:7
+    build:
+      context: ./redis
+      dockerfile: ./Dockerfile
     container_name: redis
+    ports:
+      - "8568:6379"
     restart: always
-    env_file:
-      - ./server/.env
     volumes:
-        - ./redis_data:/data
-        - ./redis/redis.conf:/usr/local/etc/redis/redis.conf
-    command: redis-server /usr/local/etc/redis/redis.conf
+      - ./redis_data:/data
+    networks:
+      - chatik-network
 
   server:
     build:

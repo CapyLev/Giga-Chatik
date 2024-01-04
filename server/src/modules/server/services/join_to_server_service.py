@@ -63,6 +63,8 @@ class JoinToServerService:
 
         result = await self._connect_user_to_server(server_id, user_id)
 
+        # TODO: add event to notify users on server about new member
+
         return UserServerDTO(
             id=result.id,
             user_id=result.user_id,

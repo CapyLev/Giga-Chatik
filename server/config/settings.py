@@ -53,14 +53,9 @@ class MongoSettings(BaseSettings):
 
 
 class RedisSettings(BaseSettings):
-    USER: str = Field("master", validation_alias="REDIS_USER")
     PASSWORD: str = Field("password", validation_alias="REDIS_PASSWORD")
-    HOST: str = Field("redis", validation_alias="REDIS_HOST")
+    HOST: str = Field("redis_conn", validation_alias="REDIS_HOST")
     PORT: int = Field(5496, validation_alias="REDIS_PORT")
-
-    @property
-    def REDIS_URL(self) -> AnyUrl:
-        return f"redis://{self.USER}:{self.PASSWORD}@{self.HOST}:{self.PORT}"
 
 
 class Settings(BaseSettings):

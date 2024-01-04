@@ -3,7 +3,7 @@ from typing import List
 
 from bson import ObjectId
 
-from config.mongo import Base
+from config.mongo_conn import Base
 
 
 class Message(Base):

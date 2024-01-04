@@ -1,11 +1,13 @@
-from fastapi import APIRouter, Depends, WebSocket, WebSocketDisconnect
+from fastapi import APIRouter, status, Depends, WebSocket, WebSocketDisconnect
+from fastapi.responses import JSONResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from config.database.utils import get_async_session
 
 from src.modules.server.repository import get_user_server_repo, get_server_repo
-from src.modules.auth.entity import UserEntity
+from src.modules.server.utils.errors import ServerNotFoundException
 from src.modules.auth.services import current_active_user
+from src.modules.auth.entity import UserEntity
 
 from .manager import Manager
 from .services import VerifyWSConnectionService
@@ -25,9 +27,15 @@ async def chat_communication(
     server_repo = get_server_repo(session)
 
     service = VerifyWSConnectionService(server_repo, user_server_repo)
-    service.execute(str(user.id), server_id)
 
-    await Manager.connect(websocket)
+    try:
+        _ = service.execute(str(user.id), server_id)
+    except ServerNotFoundException as exc:
+        return JSONResponse(
+            content={"msg": str(exc)}, status_code=status.HTTP_400_BAD_REQUEST
+        )
+
+    await Manager.connect(websocket, server_id, str(user.id))
 
     try:
         while True:

@@ -8,11 +8,11 @@ class ConnectionManager:
         await websocket.accept()
 
         pull_manager = PullManager()
-        pull_manager.add_connection_to_pull(server_id, user_id, websocket)
+        await pull_manager.add_connection_to_pull(server_id, user_id, websocket)
 
     async def disconnect(self, server_id: str, user_id: str):
         pull_manager = PullManager()
-        pull_manager.remove_connection_from_pull(server_id, user_id)
+        await pull_manager.remove_connection_from_pull(server_id, user_id)
 
     async def broadcast(self, server_id: str, message: str):
         pull_manager = PullManager()

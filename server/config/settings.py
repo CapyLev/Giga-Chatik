@@ -49,7 +49,7 @@ class MongoSettings(BaseSettings):
 
     @property
     def MONGO_URL(self) -> str:
-        return f"mongodb://{self.HOST}:{self.PORT}"  # FIXME: add user and password
+        return f"mongodb://{self.HOST}:{self.PORT}"
 
 
 class RedisSettings(BaseSettings):

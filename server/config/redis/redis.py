@@ -8,7 +8,8 @@ from ..settings import settings
 
 class RedisSessionType(Enum):
     MSG_TEMPORARY_STORAGE = 0
-    CACHE_STORAGE = 1
+    ACTIVE_CONNECTIONS_STORAGE = 1
+    CACHE_STORAGE = 2
 
 
 class RedisClient:

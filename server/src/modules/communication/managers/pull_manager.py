@@ -1,38 +1,46 @@
-from typing import Dict
+from typing import Dict, List, Tuple, TypeVar
+from dataclasses import dataclass
+
 from fastapi import WebSocket
-from config.redis_conn import RedisConnectionManager, RedisSessionType
+
+from src.modules.core.utils.funcutils import get_timestamp_as_int
+
+
+@dataclass(frozen=True, slots=True)
+class PullData:
+    ws: WebSocket
+    timestamp: int
+
+
+K = TypeVar("K", bound=Tuple[str, str])
 
 
 class PullManager:
-    async def _get_key(self, server_id: str, user_id: str) -> str:
-        return f"{server_id}:{user_id}"
+    def __init__(self) -> None:
+        self.active_connections: Dict[K, PullData] = {}
+
+    async def _get_key(self, server_id: str, user_id: str) -> K:
+        return server_id, user_id
 
     async def add_connection_to_pull(
         self, server_id: str, user_id: str, ws: WebSocket
     ) -> None:
         key = await self._get_key(server_id, user_id)
-
-        async with RedisConnectionManager(
-            RedisSessionType.ACTIVE_CONNECTIONS_STORAGE
-        ) as conn:
-            await conn.hset(key, "ws_conn", ws)
+        timestamp = await get_timestamp_as_int()
+        self.active_connections[key] = PullData(ws, timestamp)
 
     async def remove_connection_from_pull(self, server_id: str, user_id: str) -> None:
         key = await self._get_key(server_id, user_id)
+        if key in self.active_connections:
+            del self.active_connections[key]
 
-        async with RedisConnectionManager(
-            RedisSessionType.ACTIVE_CONNECTIONS_STORAGE
-        ) as conn:
-            await conn.delete(key)
+    async def get_active_connections(self, server_id: str) -> List[PullData]:
+        connections = []
+        for (s_id, u_id), data in self.active_connections.items():
+            if s_id == server_id:
+                connections.append(data)
 
-    async def get_active_connections(self, server_id: str) -> Dict[str, WebSocket]:
-        async with RedisConnectionManager(
-            RedisSessionType.ACTIVE_CONNECTIONS_STORAGE
-        ) as conn:
-            keys = await conn.keys(f"{server_id}:*")
-            connections = {}
-            for key in keys:
-                ws = await conn.hget(key, "ws_conn")
-                if ws:
-                    connections[key.decode("utf-8")] = ws
-            return connections
+        return connections
+
+
+pull_manager = PullManager()

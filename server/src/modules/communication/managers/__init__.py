@@ -1,2 +1,2 @@
-from .connection_manager import ConnectionManager, connection_singlton_manager
-from .pull_manager import PullManager
+from .connection_manager import ConnectionManager
+from .pull_manager import pull_manager

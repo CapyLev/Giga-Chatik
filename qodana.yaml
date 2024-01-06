@@ -1,0 +1,16 @@
+version: "1.0"
+
+profile:
+  name: qodana.starter
+
+exclude:
+  - name: All
+    paths:
+      - client
+      - redis
+      - nginx
+      - server/.ruff_cache
+      - server/.venv
+      - server/.idea
+
+linter: jetbrains/qodana-python:latest

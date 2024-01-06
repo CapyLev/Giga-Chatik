@@ -1,4 +1,4 @@
-from typing import Never, Union
+from typing import Union
 
 from ..dto import ServerDTO
 from ..repository import ServerRepository, UserServerRepository
@@ -12,13 +12,21 @@ class DeleteUserServerService:
         self.server_repo = server_repo
         self.user_server_repo = user_server_repo
 
-    async def _is_server_exist(self, server_id: str) -> Union[ServerDTO, Never]:
+    async def _is_server_exist(self, server_id: str) -> Union[ServerDTO, Exception]:
         server = await self.server_repo.find_by_pk(server_id)
 
         if not server:
             raise ServerNotFoundException()
 
-        return server
+        return ServerDTO(
+            id=server.id,
+            name=server.name,
+            image=server.image,
+            is_public=server.is_public,
+            password=server.password,
+            admin_id=server.admin_id,
+            created_at=server.created_at,
+        )
 
     async def _get_user_server_id(self, server_id: str, user_id: str) -> int:
         user_server = await self.user_server_repo.find_by_parameters(

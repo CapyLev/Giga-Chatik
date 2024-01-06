@@ -6,7 +6,7 @@ from fastapi_users.schemas import (
     CreateUpdateDictModel,
     models,
 )
-from pydantic import EmailStr
+from pydantic import EmailStr, BaseModel
 
 
 class UserRead(BaseUser):
@@ -29,3 +29,8 @@ class UserCreate(CreateUpdateDictModel):
     is_active: Optional[bool] = True
     is_superuser: Optional[bool] = False
     is_verified: Optional[bool] = False
+
+
+class UserShortDTO(BaseModel):
+    id: str
+    username: str

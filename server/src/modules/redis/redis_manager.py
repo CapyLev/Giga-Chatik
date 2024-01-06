@@ -2,13 +2,12 @@ from enum import Enum
 
 from redis.asyncio.client import Redis
 
-from ..settings import settings
+from config.settings import settings
 
 
 class RedisSessionType(Enum):
     MSG_TEMPORARY_STORAGE = 0
-    ACTIVE_CONNECTIONS_STORAGE = 1
-    CACHE_STORAGE = 2
+    CACHE_STORAGE = 1
 
 
 class RedisConnectionManager:

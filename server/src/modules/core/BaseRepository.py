@@ -10,7 +10,7 @@ PK = TypeVar("PK")
 M = TypeVar("M", bound=Base)
 
 
-class IRepository(Generic[M]):
+class BaseRepository(Generic[M]):
     model: Base
 
     def __init__(self, model: M, session: AsyncSession) -> None:

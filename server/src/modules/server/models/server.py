@@ -20,7 +20,7 @@ class Server(Base):
         ForeignKey("user.id", ondelete="SET NULL"),
         index=True,
     )
-    created_at: Mapped[datetime] = mapped_column(TIMESTAMP, default=datetime.utcnow())
+    created_at: Mapped[datetime] = mapped_column(TIMESTAMP, default=datetime.now())
 
     admin: Mapped["User"] = relationship(
         back_populates="admined_servers", uselist=False

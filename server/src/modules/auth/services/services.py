@@ -1,4 +1,4 @@
-from typing import Never, Union
+from typing import Union
 
 from fastapi import HTTPException
 
@@ -11,7 +11,7 @@ current_active_user = fastapi_users_auth.current_user(active=True)
 
 async def websocket_auth(
     token: str, user_manager: UserManager
-) -> Union[Never, UserEntity]:
+) -> Union[UserEntity, Exception]:
     if not token:
         raise HTTPException(status_code=401, detail="Token is missing")
 

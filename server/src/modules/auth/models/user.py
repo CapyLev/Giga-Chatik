@@ -24,7 +24,7 @@ class User(SQLAlchemyBaseUserTableUUID, Base):
     is_superuser: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
     is_verified: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
 
-    created_at: Mapped[datetime] = mapped_column(TIMESTAMP, default=datetime.utcnow())
+    created_at: Mapped[datetime] = mapped_column(TIMESTAMP, default=datetime.now())
 
     user_servers: Mapped[List["UserServer"]] = relationship(back_populates="user")
     admined_servers: Mapped[List["Server"]] = relationship(back_populates="admin")

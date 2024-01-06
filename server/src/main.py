@@ -24,9 +24,9 @@ async def startup():
     await mongo_db_connection.init_mongo_db()
 
 
-def setup_settings(app: FastAPI) -> None:
+def setup_settings(application: FastAPI) -> None:
     origins = ["*"]
-    app.add_middleware(
+    application.add_middleware(
         CORSMiddleware,
         allow_origins=origins,
         allow_credentials=True,
@@ -34,8 +34,8 @@ def setup_settings(app: FastAPI) -> None:
         allow_headers=["*"],
     )
 
-    app.add_event_handler("startup", startup)
-    app.include_router(prefix="/api", router=routes)
+    application.add_event_handler("startup", startup)
+    application.include_router(prefix="/api", router=routes)
 
 
 app: FastAPI = start_application()

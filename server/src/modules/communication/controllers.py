@@ -8,7 +8,7 @@ from src.modules.server.repository import get_user_server_repo, get_server_repo
 from src.modules.server.utils.errors import ServerNotFoundException
 from src.modules.auth.services import websocket_auth
 
-from .managers import connection_singlton_manager
+from .managers import ConnectionManager
 from .services import VerifyWSConnectionService
 from ..auth.manager import UserManager, get_user_manager
 
@@ -24,6 +24,7 @@ async def chat_communication(
 ):
     access_token = websocket.cookies.get("4atik")
     user = await websocket_auth(access_token, user_manager)
+    user_id = str(user.id)
 
     user_server_repo = get_user_server_repo(session)
     server_repo = get_server_repo(session)
@@ -31,20 +32,17 @@ async def chat_communication(
     service = VerifyWSConnectionService(server_repo, user_server_repo)
 
     try:
-        _ = service.execute(str(user.id), server_id)
+        _ = await service.execute(user_id, server_id)
     except ServerNotFoundException as exc:
         return JSONResponse(
             content={"msg": str(exc)}, status_code=status.HTTP_400_BAD_REQUEST
         )
 
-    await connection_singlton_manager.connect(websocket, server_id, str(user.id))
+    await ConnectionManager.connect(websocket, server_id, user_id)
 
     try:
         while True:
-            data = await websocket.receive_text()
-            print(data)
-            # await connection_singlton_manager.broadcast(
-            #     f"Client #{str(user.id)} says: {data}"
-            # )
+            msg = await websocket.receive_text()
+            await ConnectionManager.broadcast(server_id, user, msg)
     except WebSocketDisconnect:
-        connection_singlton_manager.disconnect(server_id, str(user.id))
+        await ConnectionManager.disconnect(server_id, user_id)

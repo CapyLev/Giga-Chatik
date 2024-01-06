@@ -4,12 +4,12 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import joinedload
 
-from src.modules.core.IRepository import IRepository, M
+from src.modules.core.BaseRepository import BaseRepository, M
 
 from ..models import UserServer
 
 
-class UserServerRepository(IRepository[UserServer]):
+class UserServerRepository(BaseRepository[UserServer]):
     async def get_user_servers_by_user_id(self, user_id: str) -> List[M]:
         query = (
             select(self.model)

@@ -1,7 +1,7 @@
 from multiprocessing import cpu_count
 from typing import Any, Dict
 
-from pydantic import Field, AnyUrl
+from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -37,7 +37,7 @@ class DatabaseSettings(BaseSettings):
     PASS: str = "postgres"
 
     @property
-    def DATABASE_URL(self) -> AnyUrl:
+    def DATABASE_URL(self) -> str:
         return f"postgresql+asyncpg://{self.USER}:{self.PASS}@{self.HOST}:{self.PORT}/{self.NAME}"
 
 
@@ -54,7 +54,7 @@ class MongoSettings(BaseSettings):
 
 class RedisSettings(BaseSettings):
     PASSWORD: str = Field("password", validation_alias="REDIS_PASSWORD")
-    HOST: str = Field("redis_conn", validation_alias="REDIS_HOST")
+    HOST: str = Field("redis", validation_alias="REDIS_HOST")
     PORT: int = Field(5496, validation_alias="REDIS_PORT")
 
 

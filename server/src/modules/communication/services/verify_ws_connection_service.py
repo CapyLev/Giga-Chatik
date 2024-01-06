@@ -1,4 +1,5 @@
-from typing import Never, Union
+from typing import Union
+
 from src.modules.server.utils.errors import ServerNotFoundException
 from src.modules.server.repository import ServerRepository, UserServerRepository
 
@@ -14,18 +15,19 @@ class VerifyWSConnectionService:
         return await self.server_repo.find_by_pk(server_id)
 
     async def _check_if_user_server_exist(self, user_id: str, server_id: str) -> bool:
-        user_servers_count = len(
-            await self.user_server_repo.find_by_parameters(user_id, server_id)
-        )
+        data = {"user_id": user_id, "server_id": server_id}
+        user_servers_count = len(await self.user_server_repo.find_by_parameters(**data))
 
         if user_servers_count > 0:
             return True
 
         return False
 
-    async def execute(self, user_id: str, server_id: str) -> Union[None, Never]:
+    async def execute(self, user_id: str, server_id: str) -> Union[None, Exception]:
         if not await self._check_if_server_exist(server_id):
             raise ServerNotFoundException()
 
         if not await self._check_if_user_server_exist(user_id, server_id):
             raise ServerNotFoundException()
+
+        return

@@ -49,10 +49,10 @@ class CreateServerService:
 
         create_server_data = await self._get_create_data(request_data, user_id)
 
-        server = await self.server_repo.create(create_server_data.dict())
+        server = await self.server_repo.create(create_server_data.model_dump())
 
         user_server_data = await self._get_user_server_data(user_id, str(server.id))
-        _ = await self.user_server_repo.create(user_server_data.dict())
+        _ = await self.user_server_repo.create(user_server_data.model_dump())
 
         return CreateServerDTO(
             name=server.name,

@@ -11,6 +11,6 @@ class Message(Base):
     user_id: str
     server_id: str
     content: str
-    timestamp: datetime = datetime.utcnow()
+    timestamp: datetime = datetime.now()
     id_deleted: bool = False
     attachments: List[str] = []

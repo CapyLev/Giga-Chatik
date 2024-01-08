@@ -1,16 +1,29 @@
 from datetime import datetime
-from typing import List
 
-from bson import ObjectId
+from mongoengine import (
+    StringField,
+    DateTimeField,
+    BooleanField,
+    ListField,
+    ObjectIdField,
+    UUIDField,
+    URLField,
+)
+from config.mongo import BaseDocument
 
-from config.mongo_conn import Base
 
+class MessageDocument(BaseDocument):
+    _id = ObjectIdField()
+    user_id = UUIDField(required=True, binary=True)
+    server_id = UUIDField(required=True, binary=True)
+    content = StringField(required=True)
+    timestamp = DateTimeField(required=True, default=datetime.now())
+    id_deleted = BooleanField(default=False)
+    attachments = ListField(URLField())
 
-class Message(Base):
-    _id: ObjectId
-    user_id: str
-    server_id: str
-    content: str
-    timestamp: datetime = datetime.now()
-    id_deleted: bool = False
-    attachments: List[str] = []
+    meta = {
+        "indexes": [
+            {"fields": ["chat_id", "timestamp"]},
+            {"fields": ["chat_id", "user_id"]},
+        ]
+    }

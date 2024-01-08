@@ -4,11 +4,7 @@ import "./global.scss";
 const App = () => {
   const routes = useRoutes();
 
-  return (
-    <>
-      {routes}
-    </>
-  );
+  return <>{routes}</>;
 };
 
 export default App;

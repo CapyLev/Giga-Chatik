@@ -2,7 +2,6 @@ import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from config.mongo_conn import mongo_db_connection
 from config.settings import settings
 
 from .modules.router import routes
@@ -20,10 +19,6 @@ def start_application() -> FastAPI:
     return application
 
 
-async def startup():
-    await mongo_db_connection.init_mongo_db()
-
-
 def setup_settings(application: FastAPI) -> None:
     origins = ["*"]
     application.add_middleware(
@@ -34,7 +29,6 @@ def setup_settings(application: FastAPI) -> None:
         allow_headers=["*"],
     )
 
-    application.add_event_handler("startup", startup)
     application.include_router(prefix="/api", router=routes)
 
 

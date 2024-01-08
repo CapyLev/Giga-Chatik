@@ -4,7 +4,6 @@ import { ServerImage } from "../../interfaces/server.interface";
 import Icon from "../Icon/Icon";
 import "./UserNavigateBar.scss";
 
-
 const UserNavigateBar: FC = () => {
   const [servers, setServers] = useState<ServerImage[]>([]);
 
@@ -14,7 +13,7 @@ const UserNavigateBar: FC = () => {
     <div className="navigationContainer">
       <div className="topSection">
         <Link to={"home"}>
-          <Icon src="home.svg" alt="Home" />
+          <Icon src="/home.svg" alt="Home" />
         </Link>
       </div>
 
@@ -33,7 +32,7 @@ const UserNavigateBar: FC = () => {
       <div className="line"></div>
 
       <div className="bottomSection">
-        <Link to={"/user/profile"}>
+        <Link to={"/profile"}>
           <Icon src="/profile.svg" alt="Home" width={55} height={55} />
         </Link>
       </div>

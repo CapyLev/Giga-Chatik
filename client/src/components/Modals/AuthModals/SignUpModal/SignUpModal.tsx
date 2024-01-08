@@ -8,7 +8,6 @@ import { isSignUpCredentialsValid } from "../../../../services/AuthServices/cred
 import * as authService from "../../../../services/AuthServices/auth.service";
 import "../../ModalsGlobal.scss";
 
-
 const SignUp: FC<ModalProps> = ({ closeModal }) => {
   const navigate = useNavigate();
 
@@ -49,7 +48,8 @@ const SignUp: FC<ModalProps> = ({ closeModal }) => {
       setValidationError(validationErrors);
     } else {
       const user = await authService.signUp(email, username, password);
-      // localStorage.setItem("userId", user.id);
+      await authService.signIn(email, password);
+      localStorage.setItem("userId", user.id);
       navigate("/home");
     }
   };

@@ -1,8 +1,8 @@
 import { useState } from "react";
 import useAuth from "../../hooks/useAuth";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { SignUpModal, SignInModal } from "../../components";
-import "./AuthPage.scss"
+import "./AuthPage.scss";
 
 const AuthPage = () => {
   const [isSignInModalOpened, setSignInModalOpened] = useState<boolean>(false);
@@ -10,8 +10,6 @@ const AuthPage = () => {
 
   const { setAuth } = useAuth();
   const navigate = useNavigate();
-  const location = useLocation();
-  const from = location.state?.from?.pathname || "/";
 
   const closeModal = () => {
     setSignInModalOpened(false);
@@ -25,7 +23,14 @@ const AuthPage = () => {
       </div>
 
       <div className="actions">
-        <button className="action" onClick={() => setSignInModalOpened(true)}>
+        <button
+          className="action"
+          type={"button"}
+          onClick={() => {
+            setAuth(true);
+            navigate("/home", { replace: true });
+          }}
+        >
           SIGN IN
         </button>
 
@@ -36,16 +41,6 @@ const AuthPage = () => {
 
       {isSignInModalOpened && <SignInModal closeModal={closeModal} />}
       {isSignUpModalOpened && <SignUpModal closeModal={closeModal} />}
-
-      {/* <button
-        type={"button"}
-        onClick={() => {
-          setAuth(true);
-          navigate(from, { replace: true });
-        }}
-      >
-        Login
-      </button> */}
     </>
   );
 };

@@ -1,36 +1,36 @@
+from typing import Any, Dict, List
 from motor.motor_asyncio import AsyncIOMotorClient
 
 from ..settings import settings
 
 
-class MongoDBConnector:
-    _client = None
-    _database = None
-    _collection = None
+class MongoCollection(object):
+    def __init__(self) -> None:
+        self.connection = AsyncIOMotorClient(settings.mongo.MONGO_URL)
 
-    async def init_mongo_db(self) -> None:
-        self._client = AsyncIOMotorClient(settings.mongo.MONGO_URL)
-        self._database = self._client[settings.mongo.NAME]
-        self._collection = self._database[settings.mongo.COLLECTION]
+    @property
+    def collection(self) -> AsyncIOMotorClient:
+        return self.connection[settings.mongo.NAME][settings.mongo.COLLECTION]
 
-        await self._create_database_if_not_exist()
-        await self._create_collection_if_not_exists()
-        await self._create_index()
+    def insert(self, document) -> None:
+        self.collection.insert_one(document)
 
-    async def _create_database_if_not_exist(self) -> None:
-        if settings.mongo.NAME not in await self._client.list_database_names():
-            await self._client.admin.command("create", settings.mongo.NAME)
+    def update(self, document: Dict[Any, Any]) -> None:
+        self.collection.update_one(
+            {"_id": document.id}, {"$set": document}, upsert=True
+        )
 
-    async def _create_collection_if_not_exists(self) -> None:
-        if (
-            settings.mongo.COLLECTION
-            not in await self._database.list_collection_names()
-        ):
-            await self._database.create_collection(settings.mongo.COLLECTION)
+    def insert_many(self, documents: List[Dict[Any, Any]]) -> None:
+        bulk = self.collection.initialize_unordered_bulk_op()
+        for document in documents:
+            bulk.insert(document)
+        bulk.execute()
 
-    async def _create_index(self) -> None:
-        await self._collection.create_index([("chat_id", 1), ("timestamp", 1)])
-        await self._collection.create_index([("chat_id", 1), ("user_id", 1)])
+    def update_many(self, documents: List[Dict[Any, Any]]) -> None:
+        bulk = self.collection.initialize_unordered_bulk_op()
+        for document in documents:
+            bulk.find({"_id": document.id}).upsert().update_one({"$set": document})
+        bulk.execute()
 
-
-mongo_db_connection: MongoDBConnector = MongoDBConnector()
+    def _find_by_ids(self, ids: List[str]) -> Dict[Any, Any]:
+        return self.collection.find({"_id": {"$in": ids}})

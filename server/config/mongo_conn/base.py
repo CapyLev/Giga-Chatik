@@ -1,5 +1,8 @@
-from pydantic import BaseModel
+from mongoengine import Document
 
 
-class Base(BaseModel):
-    pass
+class BaseDocument(Document):
+    meta = {
+        "auto_create_index": False,
+        "abstract": True,
+    }

@@ -1,0 +1,26 @@
+$background-color: #949494;
+$border-radius: 15px;
+
+.WelcomeNavigateBar {
+  justify-content: space-between;
+  position: fixed;
+  width: 99%;
+  background-color: $background-color;
+  padding: 10px;
+  
+
+  nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    a {
+      text-decoration: none;
+      color: #333;
+
+      &:hover {
+        background-color: #b4b4b4;
+      }
+    }
+  }
+}

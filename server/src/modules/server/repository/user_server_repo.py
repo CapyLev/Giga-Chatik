@@ -4,7 +4,7 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import joinedload
 
-from src.modules.core.BaseRepository import BaseRepository, M
+from config.database.repository import BaseRepository, M
 
 from ..models import UserServer
 

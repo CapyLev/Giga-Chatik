@@ -4,7 +4,7 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm.exc import NoResultFound
 
-from config.database.base import Base
+from .base import Base
 
 PK = TypeVar("PK")
 M = TypeVar("M", bound=Base)

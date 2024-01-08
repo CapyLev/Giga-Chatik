@@ -4,7 +4,7 @@ from motor.motor_asyncio import AsyncIOMotorClient
 from ..settings import settings
 
 
-class MongoCollection(object):
+class BaseMongoRepository:
     def __init__(self) -> None:
         self.connection = AsyncIOMotorClient(settings.mongo.MONGO_URL)
 
@@ -12,25 +12,22 @@ class MongoCollection(object):
     def collection(self) -> AsyncIOMotorClient:
         return self.connection[settings.mongo.NAME][settings.mongo.COLLECTION]
 
-    def insert(self, document) -> None:
+    def insert(self, document: Dict[Any, Any]) -> None:
         self.collection.insert_one(document)
 
     def update(self, document: Dict[Any, Any]) -> None:
         self.collection.update_one(
-            {"_id": document.id}, {"$set": document}, upsert=True
+            {"_id": document["_id"]}, {"$set": document}, upsert=True
         )
 
     def insert_many(self, documents: List[Dict[Any, Any]]) -> None:
-        bulk = self.collection.initialize_unordered_bulk_op()
-        for document in documents:
-            bulk.insert(document)
-        bulk.execute()
+        self.collection.insert_many(documents)
 
     def update_many(self, documents: List[Dict[Any, Any]]) -> None:
-        bulk = self.collection.initialize_unordered_bulk_op()
         for document in documents:
-            bulk.find({"_id": document.id}).upsert().update_one({"$set": document})
-        bulk.execute()
+            self.collection.update_one(
+                {"_id": document["_id"]}, {"$set": document}, upsert=True
+            )
 
-    def _find_by_ids(self, ids: List[str]) -> Dict[Any, Any]:
-        return self.collection.find({"_id": {"$in": ids}})
+    def find_by_ids(self, ids: List[str]) -> List[Dict[Any, Any]]:
+        return list(self.collection.find({"_id": {"$in": ids}}))

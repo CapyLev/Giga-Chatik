@@ -1,10 +1,15 @@
-import './App.css';
+import Navbar from "./components/Navbar";
+import useRoutes from "./routes/routes";
 
-function App() {
+const App = () => {
+  const routes = useRoutes();
+
   return (
     <>
+      <Navbar />
+      {routes}
     </>
   );
-}
+};
 
 export default App;

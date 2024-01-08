@@ -1,5 +1,3 @@
-// WelcomeNavigateBar.tsx
-
 import { FC } from "react";
 import "./WelcomeNavigateBar.scss";
 import useAuth from "../../hooks/useAuth";

@@ -1,8 +1,7 @@
 import { useState } from "react";
 import useAuth from "../../hooks/useAuth";
 import { useLocation, useNavigate } from "react-router-dom";
-import SignUpModal from "../../components/modals/AuthModals/SignUpModal/SignUpModal";
-import SignInModal from "../../components/modals/AuthModals/SignInModal/SignInModal";
+import { SignUpModal, SignInModal } from "../../components";
 import "./AuthPage.scss"
 
 const AuthPage = () => {

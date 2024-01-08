@@ -2,9 +2,10 @@ import { FC, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { ServerImage } from "../../interfaces/server.interface";
 import Icon from "../Icon/Icon";
-import "./NavigateBar.scss";
+import "./UserNavigateBar.scss";
 
-const NavigateBar: FC = () => {
+
+const UserNavigateBar: FC = () => {
   const [servers, setServers] = useState<ServerImage[]>([]);
 
   useEffect(() => {}, []);
@@ -40,4 +41,4 @@ const NavigateBar: FC = () => {
   );
 };
 
-export default NavigateBar;
+export default UserNavigateBar;

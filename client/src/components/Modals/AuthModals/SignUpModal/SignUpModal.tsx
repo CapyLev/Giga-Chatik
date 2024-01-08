@@ -8,6 +8,7 @@ import { isSignUpCredentialsValid } from "../../../../services/AuthServices/cred
 import * as authService from "../../../../services/AuthServices/auth.service";
 import "../../ModalsGlobal.scss";
 
+
 const SignUp: FC<ModalProps> = ({ closeModal }) => {
   const navigate = useNavigate();
 

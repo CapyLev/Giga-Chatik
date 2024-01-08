@@ -14,6 +14,7 @@ from .dto import (
     ServerImageDTO,
     UserServerDTO,
     CreateServerRequestDTO,
+    CreateServerDTO,
 )
 from .repository import get_user_server_repo, get_server_repo
 from .services import (
@@ -117,7 +118,7 @@ async def delete_server(
 
 @router.post(
     "",
-    # response_model=CreateServerRequestDTO,
+    response_model=CreateServerDTO,
     status_code=status.HTTP_201_CREATED,
 )
 async def create_server(

@@ -21,7 +21,7 @@ class GetServersByUserIdService:
 
         return [
             ServerImageDTO(
-                id=server.server.id,
+                id=str(server.server.id),
                 image=server.server.image,
             )
             for server in user_servers

@@ -59,5 +59,5 @@ class CreateServerService:
             image=server.image,
             is_public=server.is_public,
             password=None,
-            admin_id=server.admin_id,
+            admin_id=str(server.admin_id),
         )

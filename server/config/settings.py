@@ -30,11 +30,11 @@ class ServerSettings(BaseSettings):
 
 
 class DatabaseSettings(BaseSettings):
-    HOST: str = Field("database", validation_alias="DB_HOST")
-    PORT: int = Field(6432, validation_alias="PGBOUNCER_PORT")
-    NAME: str = Field("database", validation_alias="PGBOUNCER_DATABASE")
-    USER: str = Field("database", validation_alias="PGBOUNCER_USER")
-    PASS: str = Field("database", validation_alias="PGBOUNCER_PASSWORD")
+    HOST: str = Field("pgbouncer", validation_alias="DB_HOST")
+    PORT: int = Field(6432, validation_alias="DB_PORT")
+    NAME: str = Field("postgres", validation_alias="DB_NAME")
+    USER: str = Field("postgres", validation_alias="DB_USER")
+    PASS: str = Field("postgres", validation_alias="DB_PASSWORD")
 
     @property
     def DATABASE_URL(self) -> str:
@@ -59,7 +59,7 @@ class RedisSettings(BaseSettings):
 
 
 class Settings(BaseSettings):
-    model_config = SettingsConfigDict(env_file=".env")
+    model_config = SettingsConfigDict(env_file=".env.server")
 
     server: ServerSettings = ServerSettings()
     database: DatabaseSettings = DatabaseSettings()

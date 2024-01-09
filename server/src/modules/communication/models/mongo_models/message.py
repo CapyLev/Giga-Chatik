@@ -16,7 +16,7 @@ class MessageDocument(BaseDocument):
     server_id = UUIDField(verbose_name="Server uuid", binary=True, required=True)
     content = StringField(verbose_name="Message content", required=True)
     timestamp = DateTimeField(
-        verbose_name="Timestamp", default=datetime.now(), required=True
+        verbose_name="Timestamp", default=datetime.now, required=True
     )
     id_deleted = BooleanField(verbose_name="Message is deleted", default=False)
     attachments = ListField(URLField(verbose_name="Images/Audio/... urls"))

@@ -30,11 +30,11 @@ class ServerSettings(BaseSettings):
 
 
 class DatabaseSettings(BaseSettings):
-    HOST: str = "database"
-    PORT: int = 5432
-    NAME: str = "postgres"
-    USER: str = "postgres"
-    PASS: str = "postgres"
+    HOST: str = Field("database", validation_alias="DB_HOST")
+    PORT: int = Field(6432, validation_alias="PGBOUNCER_PORT")
+    NAME: str = Field("database", validation_alias="PGBOUNCER_DATABASE")
+    USER: str = Field("database", validation_alias="PGBOUNCER_USER")
+    PASS: str = Field("database", validation_alias="PGBOUNCER_PASSWORD")
 
     @property
     def DATABASE_URL(self) -> str:

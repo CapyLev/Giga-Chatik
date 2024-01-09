@@ -20,24 +20,25 @@
 }
 
 .centerSection {
-  overflow-y: hidden;
-  overflow-x: hidden;
   flex-grow: 1;
   position: relative;
   margin-top: 10px;
   margin-bottom: 10px;
+
+  .serverIcon {
+    &:hover {
+      transition: transform 0.3s ease-in-out;
+      transform: scale(1.1);
+    }
+  }
 }
 
 .serverIcon {
-  height: 50px;
+  width: 45px;
+  height: 45px;
   margin-bottom: 10px;
-  background-color: red;
-  width: 50px;
-  border-radius: 10px;
-
-  &:hover {
-    background-color: darken(red, 20%);
-  }
+  border-radius: 20px;
+  border: 2px solid rgb(187, 163, 119);
 }
 
 .line {
@@ -46,4 +47,5 @@
   background-color: #ae9d00;
   border-radius: 10px;
   margin-top: 5px;
+  margin-bottom: 5px;
 }

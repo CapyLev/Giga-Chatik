@@ -1,22 +1,23 @@
 $primaryColor: #4caf50;
 
-.actions {
-    display: flex;
-    justify-content: center;
-    margin-top: 20px;
-  
-    button {
-      margin: 0 10px;
-      padding: 10px 20px;
-      text-decoration: none;
-      color: #fff;
-      background-color: $primaryColor;
-      border-radius: 10px;
-      box-shadow: 0 2px 7px rgba(0, 0, 0, 0.4);
-  
-      &:hover {
-        background-color: darken($primaryColor, 10%);
-      }
+.action {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+
+  button {
+    margin: 0 10px;
+    padding: 10px 20px;
+    text-decoration: none;
+    color: #000000;
+    background-color: $primaryColor;
+    border-radius: 10px;
+    box-shadow: 0 2px 7px rgba(0, 0, 0, 0.4);
+
+    &:hover {
+      background-color: darken($primaryColor, 10%);
+      transition: transform 0.3s ease-in-out;
+      transform: scale(1.03);
     }
   }
-  
+}

@@ -1,3 +1,5 @@
+$primaryColor: #4caf50;
+
 .title {
   display: flex;
   flex-direction: column;
@@ -7,7 +9,12 @@
   text-align: center;
 
   h1 {
-    font-size: 5em;
+    font-size: 8em;
     font-weight: bold;
   }
+}
+
+.authActions {
+  display: flex;
+  justify-content: center;
 }

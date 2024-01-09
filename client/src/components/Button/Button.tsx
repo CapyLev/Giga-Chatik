@@ -1,4 +1,4 @@
-import { FC, MouseEvent } from 'react';
+import { FC, MouseEvent } from "react";
 import "./Button.scss";
 
 interface ButtonProps {
@@ -13,9 +13,9 @@ const Button: FC<ButtonProps> = ({ onClickHandler, buttonText }) => {
   };
 
   return (
-    <button className="action" onClick={handleClick}>
-      {buttonText}
-    </button>
+    <div className="action">
+      <button onClick={handleClick}>{buttonText}</button>
+    </div>
   );
 };
 

@@ -5,10 +5,12 @@ import {
   ModalProps,
 } from "../../../../interfaces/common.interface";
 import { isSignInCredentialsValid } from "../../../../services/AuthServices/credentialsChecker.service";
+import useAuth from "../../../../hooks/useAuth";
 import * as authService from "../../../../services/AuthServices/auth.service";
 import "../../ModalsGlobal.scss";
 
 const SignIn: FC<ModalProps> = ({ closeModal }) => {
+  const { setAuth } = useAuth();
   const navigate = useNavigate();
 
   const [validationError, setValidationError] = useState<
@@ -34,7 +36,8 @@ const SignIn: FC<ModalProps> = ({ closeModal }) => {
     } else {
       setValidationError(null);
       await authService.signIn(email, password);
-      navigate("/home");
+      setAuth(true);
+      navigate("/home", { replace: true });
     }
   };
 

@@ -27,8 +27,10 @@ const UserNavigateBar: FC = () => {
       <div className="centerSection">
         {servers
           ? servers.map((server) => (
-              <div key={server.id} className="Icon">
-                <Icon src={server.image} alt={`Server ${server.id}`} />
+              <div key={server.id} className="Icon serverIcon">
+                <Link to={`/server/${server.id}/`}>
+                  <Icon src={server.image} alt={`Server ${server.id}`} />
+                </Link>
               </div>
             ))
           : []}

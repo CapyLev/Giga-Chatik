@@ -8,9 +8,22 @@ services:
     ports:
       - '6968:5432'
     env_file:
-      - ./server/.env
+      - ./.env
     volumes:
       - pg_data:/var/lib/postgresql/data
+    networks:
+      - chatik-network
+
+  pgbouncer:
+    image: edoburu/pgbouncer:1.21.0-p2
+    container_name: pgbouncer
+    restart: always
+    ports:
+      - '6439:6432'
+    env_file:
+      - ./.env
+    depends_on:
+      - database
     networks:
       - chatik-network
 
@@ -20,7 +33,7 @@ services:
     ports:
       - "17027:27017"
     env_file:
-      - ./server/.env
+      - ./.env
     volumes:
       - mongodb_data:/data/db
     networks:
@@ -54,7 +67,7 @@ services:
     ports:
       - '6969:6969'
     env_file:
-      - ./server/.env
+      - ./server/.env.server
     volumes:
       - ./server/src:/usr/src/app/src
       - ./server/config:/usr/src/app/config

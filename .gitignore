@@ -25,3 +25,4 @@ logs
 .next
 __pycache__
 redis_data/
+.env.server

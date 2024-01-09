@@ -17,10 +17,10 @@ class ServerRepository(BaseRepository[Server]):
         query = (
             select(self.model)
             .filter_by(is_public=True)
-            .options(joinedload(self.model.server))
+            .options(joinedload(self.model.user_servers))
         )
         result = await self._execute(query)
-        return result.scalars().all()
+        return result.unique().scalars().all()
 
 
 def get_server_repo(

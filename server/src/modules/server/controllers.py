@@ -7,7 +7,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from config.database.utils import get_async_session
 from src.modules.auth.entity import UserEntity
-from src.modules.auth.services import current_active_user
+from src.modules.auth.utils import current_active_user
 from .dto import (
     EditServerRequestDTO,
     JoinServerRequestDTO,
@@ -63,8 +63,8 @@ async def get_public_servers(
     _: UserEntity = Depends(current_active_user),
     session: AsyncSession = Depends(get_async_session),
 ):
-    user_server_repo = get_user_server_repo(session)
-    service = GetAllPublicServerService(user_server_repo)
+    server_repo = get_server_repo(session)
+    service = GetAllPublicServerService(server_repo)
     result = await service.execute()
     return {"result": result}
 

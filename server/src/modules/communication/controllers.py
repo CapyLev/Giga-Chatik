@@ -6,7 +6,7 @@ from config.database.utils import get_async_session
 
 from src.modules.server.repository import get_user_server_repo, get_server_repo
 from src.modules.server.utils.errors import ServerNotFoundException
-from src.modules.auth.services import websocket_auth
+from src.modules.auth.utils import websocket_auth
 
 from .managers import ConnectionManager
 from .services import VerifyWSConnectionService

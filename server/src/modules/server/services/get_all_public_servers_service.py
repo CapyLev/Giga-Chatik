@@ -15,11 +15,11 @@ class GetAllPublicServerService:
 
         return [
             ServerPublicShortDTO(
-                id=server.id,
+                id=str(server.id),
                 image=server.image,
                 name=server.name,
                 admin=UserShortDTO(
-                    id=server.admin.id,
+                    id=str(server.admin.id),
                     username=server.admin.username,
                 ),
                 count_of_members=len(server.user_servers),

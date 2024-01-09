@@ -3,3 +3,4 @@ from .delete_user_server_service import DeleteUserServerService
 from .edit_server_settings_service import EditServerSettingsService
 from .get_servers_by_user_id_service import GetServersByUserIdService
 from .join_to_server_service import JoinToServerService
+from .get_all_public_servers_service import GetAllPublicServerService

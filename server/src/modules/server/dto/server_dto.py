@@ -3,6 +3,8 @@ from typing import Optional, Union
 
 from pydantic import BaseModel
 
+from src.modules.auth.dto import UserShortDTO
+
 
 class ServerDTO(BaseModel):
     id: str
@@ -17,6 +19,14 @@ class ServerDTO(BaseModel):
 class ServerImageDTO(BaseModel):
     id: str
     image: Optional[str]
+
+
+class ServerPublicShortDTO(BaseModel):
+    id: str
+    image: Optional[str]
+    name: Optional[str]
+    admin: UserShortDTO
+    count_of_members: int
 
 
 class JoinServerRequestDTO(BaseModel):

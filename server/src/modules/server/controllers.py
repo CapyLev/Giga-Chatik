@@ -15,6 +15,7 @@ from .dto import (
     UserServerDTO,
     CreateServerRequestDTO,
     CreateServerDTO,
+    ServerPublicShortDTO,
 )
 from .repository import get_user_server_repo, get_server_repo
 from .services import (
@@ -23,6 +24,7 @@ from .services import (
     GetServersByUserIdService,
     JoinToServerService,
     CreateServerService,
+    GetAllPublicServerService,
 )
 from .utils.errors import (
     ServerNotFoundException,
@@ -38,7 +40,7 @@ router = APIRouter()
 
 
 @router.get(
-    "/getAll",
+    "/user-servers/",
     response_model=Dict[str, List[ServerImageDTO]],
     status_code=status.HTTP_200_OK,
 )
@@ -49,6 +51,21 @@ async def get_user_servers(
     user_server_repo = get_user_server_repo(session)
     service = GetServersByUserIdService(user_server_repo)
     result = await service.execute(user.id)
+    return {"result": result}
+
+
+@router.get(
+    "/public-servers/",
+    response_model=Dict[str, List[ServerPublicShortDTO]],
+    status_code=status.HTTP_200_OK,
+)
+async def get_public_servers(
+    _: UserEntity = Depends(current_active_user),
+    session: AsyncSession = Depends(get_async_session),
+):
+    user_server_repo = get_user_server_repo(session)
+    service = GetAllPublicServerService(user_server_repo)
+    result = await service.execute()
     return {"result": result}
 
 

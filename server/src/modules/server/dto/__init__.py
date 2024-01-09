@@ -5,5 +5,6 @@ from .server_dto import (
     EditServerRequestDTO,
     CreateServerRequestDTO,
     CreateServerDTO,
+    ServerPublicShortDTO,
 )
 from .user_server_dto import UserServerDTO, UserServerCreateDTO

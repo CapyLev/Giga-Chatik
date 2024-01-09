@@ -1,4 +1,9 @@
+from typing import List
+
 from fastapi import Depends
+
+from sqlalchemy import select
+from sqlalchemy.orm import joinedload
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from config.database.utils import get_async_session
@@ -8,7 +13,14 @@ from ..models import Server
 
 
 class ServerRepository(BaseRepository[Server]):
-    pass
+    async def get_public_servers(self) -> List[Server]:
+        query = (
+            select(self.model)
+            .filter_by(is_public=True)
+            .options(joinedload(self.model.server))
+        )
+        result = await self._execute(query)
+        return result.scalars().all()
 
 
 def get_server_repo(

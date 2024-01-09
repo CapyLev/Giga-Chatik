@@ -2,7 +2,7 @@ from fastapi import WebSocket
 
 from src.modules.auth.entity import UserEntity
 
-from ..services import MessageStoreService
+from ..services import MessageStoreService, SendMessagesOnConnectService
 from .pull_manager import pull_manager
 
 
@@ -11,6 +11,9 @@ class ConnectionManager:
     async def connect(websocket: WebSocket, server_id: str, user_id: str):
         await pull_manager.add_connection_to_pull(server_id, user_id, websocket)
         await websocket.accept()
+
+        send_message_on_connect_service = SendMessagesOnConnectService()
+        await send_message_on_connect_service.execute(websocket)
 
     @staticmethod
     async def disconnect(server_id: str, user_id: str):

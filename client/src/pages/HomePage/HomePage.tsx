@@ -1,5 +1,13 @@
+import './HomePage.scss';
+
 const HomePage = () => {
-  return <h1>HomePage</h1>;
+  return (
+    <>
+    <div className="home">
+      <h1>WELCOME</h1>
+    </div>
+    </>
+  );
 };
 
 export default HomePage;

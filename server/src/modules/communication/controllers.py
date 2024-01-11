@@ -29,7 +29,10 @@ async def chat_communication(
     user_server_repo = get_user_server_repo(session)
     server_repo = get_server_repo(session)
 
-    service = VerifyWSConnectionService(server_repo, user_server_repo)
+    service = VerifyWSConnectionService(
+        server_repo=server_repo,
+        user_server_repo=user_server_repo,
+    )
 
     try:
         _ = await service.execute(user_id, server_id)

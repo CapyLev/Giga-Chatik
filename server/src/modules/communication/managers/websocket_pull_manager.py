@@ -7,7 +7,7 @@ from src.modules.core.utils.funcutils import get_timestamp_as_int
 
 
 @dataclass(frozen=True, slots=True)
-class PullData:
+class WebSocketPullData:
     ws: WebSocket
     timestamp: int
 
@@ -15,9 +15,9 @@ class PullData:
 K = TypeVar("K", bound=Tuple[str, str])
 
 
-class PullManager:
+class WebSocketPullManager:
     def __init__(self) -> None:
-        self.active_connections: Dict[K, PullData] = {}
+        self.active_connections: Dict[K, WebSocketPullData] = {}
 
     async def _get_key(self, server_id: str, user_id: str) -> K:
         return server_id, user_id
@@ -27,14 +27,14 @@ class PullManager:
     ) -> None:
         key = await self._get_key(server_id, user_id)
         timestamp = await get_timestamp_as_int()
-        self.active_connections[key] = PullData(ws, timestamp)
+        self.active_connections[key] = WebSocketPullData(ws, timestamp)
 
     async def remove_connection_from_pull(self, server_id: str, user_id: str) -> None:
         key = await self._get_key(server_id, user_id)
         if key in self.active_connections:
             del self.active_connections[key]
 
-    async def get_active_connections(self, server_id: str) -> List[PullData]:
+    async def get_active_connections(self, server_id: str) -> List[WebSocketPullData]:
         connections = []
         for (s_id, u_id), data in self.active_connections.items():
             if s_id == server_id:
@@ -43,4 +43,4 @@ class PullManager:
         return connections
 
 
-pull_manager = PullManager()
+websocket_pull_manager: WebSocketPullManager = WebSocketPullManager()

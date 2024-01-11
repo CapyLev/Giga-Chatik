@@ -1,2 +1,2 @@
 from .connection_manager import ConnectionManager
-from .pull_manager import pull_manager
+from .websocket_pull_manager import websocket_pull_manager

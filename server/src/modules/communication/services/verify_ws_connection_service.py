@@ -6,17 +6,21 @@ from src.modules.server.repository import ServerRepository, UserServerRepository
 
 class VerifyWSConnectionService:
     def __init__(
-        self, server_repo: ServerRepository, user_server_repo: UserServerRepository
+        self,
+        server_repo: ServerRepository,
+        user_server_repo: UserServerRepository,
     ) -> None:
-        self.server_repo = server_repo
-        self.user_server_repo = user_server_repo
+        self._server_repo = server_repo
+        self._user_server_repo = user_server_repo
 
     async def _check_if_server_exist(self, server_id: str) -> bool:
-        return await self.server_repo.find_by_pk(server_id)
+        return await self._server_repo.find_by_pk(server_id)
 
     async def _check_if_user_server_exist(self, user_id: str, server_id: str) -> bool:
         data = {"user_id": user_id, "server_id": server_id}
-        user_servers_count = len(await self.user_server_repo.find_by_parameters(**data))
+        user_servers_count = len(
+            await self._user_server_repo.find_by_parameters(**data)
+        )
 
         if user_servers_count > 0:
             return True

@@ -21,3 +21,13 @@ repos:
     -   id: ruff
         args: [ --fix ]
     -   id: ruff-format
+    rev: v3.2.0
+-   repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v3.2.0
+    hooks:
+    -   id: prettier
+        name: Prettier
+        entry: npx
+        args: ['prettier', '--write', '.']
+        language: node
+        files: ^client/

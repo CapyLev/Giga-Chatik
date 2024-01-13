@@ -5,6 +5,11 @@ interface authData {
   [key: string]: string;
 }
 
+interface signInData {
+  access_token: string;
+  token_type: string;
+}
+
 export const signIn = async (
   email: string,
   password: string,
@@ -21,11 +26,20 @@ export const signIn = async (
     )
     .join("&");
 
-  await axiosInst.post("/api/auth/login", formData, {
-    headers: {
-      "Content-Type": "application/x-www-form-urlencoded",
+  const { data } = await axiosInst.post<signInData>(
+    "/api/auth/login",
+    formData,
+    {
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
     },
-  });
+  );
+
+  const { access_token } = data;
+  const token = `Bearer ${access_token}`;
+
+  localStorage.setItem("token", token);
 };
 
 export const signUp = async (
@@ -54,4 +68,7 @@ export const signUp = async (
 
 export async function logout(): Promise<void> {
   await axiosInst.post("/api/auth/logout");
+
+  localStorage.removeItem("token");
+  localStorage.removeItem("token_type");
 }

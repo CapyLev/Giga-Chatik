@@ -20,7 +20,7 @@ def start_application() -> FastAPI:
 
 
 def setup_settings(application: FastAPI) -> None:
-    origins = ["*"]
+    origins = ["http://localhost", "http://localhost:3000"]
     application.add_middleware(
         CORSMiddleware,
         allow_origins=origins,

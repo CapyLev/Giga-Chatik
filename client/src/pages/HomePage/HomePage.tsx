@@ -3,11 +3,13 @@ import { Button } from "../../components";
 import "./HomePage.scss";
 
 const HomePage = () => {
-  const [isJoinToServerModalOpened, setJoinToServerModalOpened] = useState<boolean>(false);
-  const [isCreateServerModalOpened, setCreateServerModalOpened] = useState<boolean>(false);
+  const [isJoinToServerModalOpened, setJoinToServerModalOpened] =
+    useState<boolean>(false);
+  const [isCreateServerModalOpened, setCreateServerModalOpened] =
+    useState<boolean>(false);
 
-  const handleJoinToServerBtn = () => { };
-  const handleCreateServerBtn = () => { };
+  const handleJoinToServerBtn = () => {};
+  const handleCreateServerBtn = () => {};
 
   return (
     <div className="home">

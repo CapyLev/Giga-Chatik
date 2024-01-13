@@ -1,6 +1,6 @@
 repos:
 -   repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v3.2.0
+    rev: v4.5.0
     hooks:
     -   id: trailing-whitespace
         files: ^server/(src|config)/
@@ -16,7 +16,7 @@ repos:
     -   id: black
         files: ^server/(src|config)/
 -   repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.1.9
+    rev: v0.1.13
     hooks:
     -   id: ruff
         args: [ --fix ]

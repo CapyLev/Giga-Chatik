@@ -33,5 +33,4 @@ class RedisConnectionManager:
             encoding="utf-8",
             decode_responses=True,
             db=session_type,
-            protocol=3,
         )

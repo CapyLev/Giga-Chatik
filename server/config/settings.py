@@ -30,7 +30,7 @@ class ServerSettings(BaseSettings):
 
 
 class DatabaseSettings(BaseSettings):
-    HOST: str = Field("pgbouncer", validation_alias="DB_HOST")
+    HOST: str = Field("postgres", validation_alias="DB_HOST")
     PORT: int = Field(6432, validation_alias="DB_PORT")
     NAME: str = Field("postgres", validation_alias="DB_NAME")
     USER: str = Field("postgres", validation_alias="DB_USER")
@@ -42,7 +42,7 @@ class DatabaseSettings(BaseSettings):
 
 
 class MongoSettings(BaseSettings):
-    NAME: str = Field("msgStorage", validation_alias="MONGO_INITDB_DB_NAME")
+    NAME: str = Field("gigachatik", validation_alias="MONGO_INITDB_DB_NAME")
     COLLECTION: str = Field("msgStorage", validation_alias="MONGO_INITDB_COLLECTION")
     HOST: str = Field("mongodb", validation_alias="MONGO_INITDB_HOST")
     PORT: int = Field("27017", validation_alias="MONGO_INITDB_PORT")

@@ -22,7 +22,7 @@ async def chat_communication(
     user_manager: UserManager = Depends(get_user_manager),
     session: AsyncSession = Depends(get_async_session),
 ):
-    access_token = websocket.cookies.get("4atik")
+    access_token = websocket.headers.get("Authorization")
     user = await websocket_auth(access_token, user_manager)
     user_id = str(user.id)
 

@@ -17,7 +17,7 @@ async def websocket_auth(
 
     jwt_strategy = get_jwt_strategy()
 
-    user = await jwt_strategy.read_token(token, user_manager)
+    user = await jwt_strategy.read_token(token.split()[-1], user_manager)
 
     if user and user.is_active:
         return user

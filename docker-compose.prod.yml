@@ -1,0 +1,39 @@
+version: '3.9'
+
+services:
+  server:
+    build:
+      context: ./server
+      dockerfile: ./Dockerfile
+      target: dev
+    container_name: 4atik
+    command: >
+      sh -c "
+        alembic upgrade head &&
+        python -m src.main
+      "
+    restart: always
+    ports:
+      - '6969:6969'
+    env_file:
+      - ./server/.env.server
+    volumes:
+      - ./server/src:/usr/src/app/src
+      - ./server/config:/usr/src/app/config
+    networks:
+      - chatik-network
+
+  nginx:
+    build:
+      context: ./nginx
+      dockerfile: ./Dockerfile
+      target: dev
+    container_name: nginx
+    restart: always
+    ports:
+      - '80:8080'
+    networks:
+      - chatik-network
+
+networks:
+  chatik-network:

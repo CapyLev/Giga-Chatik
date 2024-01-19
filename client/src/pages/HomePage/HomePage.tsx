@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { Button } from "../../components";
 import "./HomePage.scss";
+import CreateServerModal from "../../components/Modals/HomeModals/CreateServerModal/CreateServerModal";
+import JoinToServerModal from "../../components/Modals/HomeModals/JoinToServerModal/JoinToServerModal";
 
 const HomePage = () => {
   const [isJoinToServerModalOpened, setJoinToServerModalOpened] =
@@ -8,8 +10,17 @@ const HomePage = () => {
   const [isCreateServerModalOpened, setCreateServerModalOpened] =
     useState<boolean>(false);
 
-  const handleJoinToServerBtn = () => {};
-  const handleCreateServerBtn = () => {};
+  const closeModal = () => {
+    setCreateServerModalOpened(false);
+    setJoinToServerModalOpened(false);
+  };
+
+  const handleJoinToServerBtn = () => {
+    setJoinToServerModalOpened(true);
+  };
+  const handleCreateServerBtn = () => {
+    setCreateServerModalOpened(true);
+  };
 
   return (
     <div className="home">
@@ -25,8 +36,13 @@ const HomePage = () => {
           buttonText="CREATE UR OWN PARTY"
         />
       </div>
-      {/* {isJoinToServerModalOpened && <... closeModal={closeModal} />}
-      {isCreateServerModalOpened && <... closeModal={closeModal} />} */}
+
+      {isJoinToServerModalOpened && (
+        <JoinToServerModal closeModal={closeModal} />
+      )}
+      {isCreateServerModalOpened && (
+        <CreateServerModal closeModal={closeModal} />
+      )}
     </div>
   );
 };

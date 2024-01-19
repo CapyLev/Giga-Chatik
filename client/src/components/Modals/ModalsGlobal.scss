@@ -15,6 +15,7 @@
   padding: 20px;
   border-radius: 8px;
   position: relative;
+  align-items: center;
 }
 
 .modalContent {
@@ -43,6 +44,7 @@
 }
 
 .close {
+  display: flex;
   position: absolute;
   top: 5px;
   right: 6px;

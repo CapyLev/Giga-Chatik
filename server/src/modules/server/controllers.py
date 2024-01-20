@@ -85,13 +85,19 @@ async def join_to_server(
         )
     except (
         ServerNotFoundException,
-        ServerPasswordRequiredException,
-        ServerPasswordInvalidException,
         UserAlreadyExistsOnThisServerException,
     ) as exc:
         return JSONResponse(
             content={"msg": str(exc)}, status_code=status.HTTP_400_BAD_REQUEST
         )
+    except (
+        ServerPasswordRequiredException,
+        ServerPasswordInvalidException,
+    ) as exc:
+        return JSONResponse(
+            content={"msg": str(exc)}, status_code=status.HTTP_403_FORBIDDEN
+        )
+
     return result
 
 

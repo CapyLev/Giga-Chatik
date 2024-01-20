@@ -1,12 +1,12 @@
 import { FC, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { ServerImage } from "../../interfaces/server.interface";
+import { ServerImageDTO } from "../../interfaces/server.interface";
 import * as serverService from "../../services/ServerServices/server.service";
 import Icon from "../Icon/Icon";
 import "./UserNavigateBar.scss";
 
 const UserNavigateBar: FC = () => {
-  const [servers, setServers] = useState<ServerImage[]>([]);
+  const [servers, setServers] = useState<ServerImageDTO[]>([]);
 
   useEffect(() => {
     serverService

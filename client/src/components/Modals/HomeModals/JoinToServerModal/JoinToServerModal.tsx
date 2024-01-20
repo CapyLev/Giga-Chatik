@@ -1,5 +1,6 @@
 import React, { FC, useState } from "react";
 import { ModalProps } from "../../../../interfaces/common.interface";
+import * as serverService from "../../../../services/ServerServices/server.service";
 import "../../ModalsGlobal.scss";
 import "./JoinToServerModal.scss";
 
@@ -7,6 +8,7 @@ const JoinToServerModal: FC<ModalProps> = ({ closeModal }) => {
   const [serverId, setServerId] = useState<string>("");
   const [isPrivate, setIsPrivate] = useState<boolean>(false);
   const [serverPassword, setServerPassword] = useState<string>("");
+  const [error, setError] = useState<string | null>(null);
 
   const handleContainerClick = (e: React.MouseEvent<HTMLDivElement>) => {
     e.stopPropagation();
@@ -30,11 +32,14 @@ const JoinToServerModal: FC<ModalProps> = ({ closeModal }) => {
   };
 
   const handleSubmit = async () => {
-    // доделать эту хуету
-    // нужно отправить сразу запрос без никаких проверок
-    // отловить ошибку
-    // нас интересует только одна ошибка и это если пароль неверн.
-    // на сервере надо поменять скорее всего статус код
+    const is_password_required = await serverService.joinToServer(
+      serverId,
+      serverPassword,
+    );
+
+    if (is_password_required) {
+      setError("Password is incorrect.");
+    }
   };
 
   return (
@@ -47,6 +52,7 @@ const JoinToServerModal: FC<ModalProps> = ({ closeModal }) => {
           </span>
         </div>
         <div className="modalContent">
+          {error && <p>{error}</p>}
           <input
             type="text"
             placeholder="Server id"

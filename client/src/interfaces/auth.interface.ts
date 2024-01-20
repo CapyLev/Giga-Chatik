@@ -6,3 +6,9 @@ export interface signUpUserData {
   is_verified: boolean;
   username: string;
 }
+
+export interface shortUserInfoDTO {
+  id: string;
+  username: string;
+  // TODO: image: string
+}

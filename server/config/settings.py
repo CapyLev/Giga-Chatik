@@ -58,6 +58,10 @@ class RedisSettings(BaseSettings):
     PORT: int = Field(5496, validation_alias="REDIS_PORT")
 
 
+class ExtraSettings(BaseSettings):
+    BETTER_STACK_LOGS_TOKEN: str
+
+
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file=".env.server")
 
@@ -65,6 +69,7 @@ class Settings(BaseSettings):
     database: DatabaseSettings = DatabaseSettings()
     mongo: MongoSettings = MongoSettings()
     redis: RedisSettings = RedisSettings()
+    extra: ExtraSettings = ExtraSettings()
 
 
 settings = Settings()

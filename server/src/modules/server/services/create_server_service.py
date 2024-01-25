@@ -1,4 +1,4 @@
-from src.modules.core.utils.hasher import Hasher
+from src.utils.hasher import Hasher
 
 from ..dto import CreateServerRequestDTO, CreateServerDTO, UserServerCreateDTO
 from ..repository import ServerRepository, UserServerRepository

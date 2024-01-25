@@ -1,8 +1,13 @@
 import uvicorn
+
+from starlette.middleware.base import BaseHTTPMiddleware
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from config.settings import settings
+
+from src.middlewares import log_middleware
 
 from .modules.router import routes
 
@@ -30,6 +35,7 @@ def setup_settings(application: FastAPI) -> None:
     )
 
     application.include_router(prefix="/api", router=routes)
+    application.add_middleware(BaseHTTPMiddleware, dispatch=log_middleware)
 
 
 app: FastAPI = start_application()

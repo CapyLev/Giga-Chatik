@@ -13,6 +13,7 @@ class Server(Base):
         UUID(as_uuid=True), primary_key=True, default=uuid.uuid4
     )
     name: Mapped[str] = mapped_column(String(length=70))
+    description: Mapped[str] = mapped_column(String(length=500), nullable=True)
     image: Mapped[str] = mapped_column(String(length=500), nullable=True)
     is_public: Mapped[bool] = mapped_column(default=False, index=True)
     password: Mapped[str] = mapped_column(String(length=250), nullable=True)

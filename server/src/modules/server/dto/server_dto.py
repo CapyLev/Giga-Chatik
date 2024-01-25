@@ -10,6 +10,7 @@ class ServerDTO(BaseModel):
     id: str
     name: str
     image: Optional[str]
+    desc: Optional[str]
     is_public: bool
     password: Optional[str]
     admin_id: str
@@ -24,6 +25,7 @@ class ServerImageDTO(BaseModel):
 class ServerPublicShortDTO(BaseModel):
     id: str
     image: Optional[str]
+    desc: Optional[str]
     name: Optional[str]
     admin: UserShortDTO
     count_of_members: int
@@ -36,6 +38,7 @@ class JoinServerRequestDTO(BaseModel):
 class EditServerRequestDTO(BaseModel):
     name: Optional[str]
     password: Optional[str]
+    desc: Optional[str]
     image: Optional[str]
     is_public: Optional[bool]
 

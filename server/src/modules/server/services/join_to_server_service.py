@@ -32,9 +32,11 @@ class JoinToServerService:
             password=server.password,
             admin_id=server.admin_id,
             created_at=server.created_at,
+            desc=server.description,
         )
 
     async def _validate_private_server_password(self, password: str) -> bool:
+        # TODO:
         return True
 
     async def _is_user_already_on_server(self, server_id: str, user_id: str) -> bool:
@@ -78,6 +80,7 @@ class JoinToServerService:
                 id=result.server.id,
                 name=result.server.name,
                 image=result.server.image,
+                desc=result.server.description,
                 is_public=result.server.is_public,
                 password=result.server.password,
                 admin_id=result.server.admin_id,

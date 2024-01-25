@@ -17,7 +17,7 @@ const UserNavigateBar: FC = () => {
   return (
     <div className="navigationContainer">
       <div className="topSection">
-        <Link to={"home"}>
+        <Link to={"/home"}>
           <Icon src="/home.svg" alt="Home" />
         </Link>
       </div>

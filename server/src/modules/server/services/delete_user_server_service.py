@@ -26,6 +26,7 @@ class DeleteUserServerService:
             password=server.password,
             admin_id=server.admin_id,
             created_at=server.created_at,
+            desc=server.description,
         )
 
     async def _get_user_server_id(self, server_id: str, user_id: str) -> int:

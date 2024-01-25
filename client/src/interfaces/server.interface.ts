@@ -7,6 +7,7 @@ export interface ServerDTO {
   is_public: boolean;
   password: string | null;
   admin_id: string;
+  desc: string;
   created_at: Date;
 }
 
@@ -31,7 +32,8 @@ export interface PublicServerDTO {
   image: string;
   name: string;
   admin: shortUserInfoDTO;
-  count_of_members: number;
+  desc: string;
+  countOfMembers: number;
 }
 
 export interface PublicServerResponseDTO {

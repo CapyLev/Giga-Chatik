@@ -19,6 +19,7 @@ class EditServerSettingsService:
             id=server.id,
             name=server.name,
             image=server.image,
+            desc=server.description,
             is_public=server.is_public,
             password=server.password,
             admin_id=server.admin_id,
@@ -48,4 +49,5 @@ class EditServerSettingsService:
             password=updated_instance.password,
             image=updated_instance.image,
             is_public=updated_instance.is_public,
+            desc=updated_instance.description,
         )

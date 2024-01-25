@@ -2,9 +2,30 @@
   text-align: center;
   margin-top: 100px;
   font-size: larger;
+  grid-template-columns: 70px 1fr;
+  gap: 20px;
 
   .serverActions {
     display: flex;
     justify-content: center;
+    grid-column: span 2;
+  }
+
+  .publicServers {
+    grid-column: span 2;
+    text-align: center;
+
+    h4 {
+      margin-bottom: 10px;
+    }
+
+    .publicServersList {
+      margin-left: 100px;
+      margin-right: 100px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 10px;
+    }
   }
 }
+

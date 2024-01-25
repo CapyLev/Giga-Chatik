@@ -17,6 +17,7 @@ class GetAllPublicServerService:
             ServerPublicShortDTO(
                 id=str(server.id),
                 image=server.image,
+                desc=server.description,
                 name=server.name,
                 admin=UserShortDTO(
                     id=str(server.admin.id),

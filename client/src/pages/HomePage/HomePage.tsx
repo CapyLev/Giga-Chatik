@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
-import { Button, Icon } from "../../components";
+import { Button } from "../../components";
 import * as serverService from "../../services/ServerServices/server.service";
 import CreateServerModal from "../../components/Modals/HomeModals/CreateServerModal/CreateServerModal";
 import JoinToServerModal from "../../components/Modals/HomeModals/JoinToServerModal/JoinToServerModal";
+import PublicServer from "../../components/PublicServer/PublicServer";
 import { PublicServerDTO } from "../../interfaces/server.interface";
 import "./HomePage.scss";
 
@@ -49,10 +50,15 @@ const HomePage = () => {
       <div className="publicServers">
         <h4>Public Servers</h4>
         <div className="publicServersList">
-          {/* TODO: Show public servers */}
           {publicServers
             ? publicServers.map((server) => (
-              <p>server {server.name}</p>
+              <PublicServer
+                key={server.id}
+                name={server.name}
+                desc={server.desc}
+                countOfMembers={server.countOfMembers}
+                image={server.image}
+              />
             ))
             : []}
         </div>

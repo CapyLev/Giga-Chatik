@@ -3,7 +3,7 @@ from dataclasses import dataclass
 
 from fastapi import WebSocket
 
-from src.modules.core.utils.funcutils import get_timestamp_as_int
+from src.utils.funcutils import get_timestamp_as_int
 
 
 @dataclass(frozen=True, slots=True)

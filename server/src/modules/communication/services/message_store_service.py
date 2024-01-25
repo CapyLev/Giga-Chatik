@@ -1,8 +1,9 @@
+from src.utils.funcutils import get_uuid_as_str, get_timestamp_as_int
+
+from src.modules.redis import RedisConnectionManager, RedisSessionType
+from src.modules.communication.dto import MessageDTO
 from src.modules.auth.entity import UserEntity
 from src.modules.auth.dto import UserShortDTO
-from src.modules.redis import RedisConnectionManager, RedisSessionType
-from src.modules.core.utils.funcutils import get_uuid_as_str, get_timestamp_as_int
-from src.modules.communication.dto import MessageDTO
 
 
 class MessageStoreService:

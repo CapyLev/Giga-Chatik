@@ -1,7 +1,9 @@
 from sqlalchemy.orm import DeclarativeBase, Mapped, declared_attr, mapped_column
 
+from .repository import BaseRepositoryMixin
 
-class Base(DeclarativeBase):
+
+class Base(DeclarativeBase, BaseRepositoryMixin):
     __abstract__ = True
 
     @declared_attr.directive

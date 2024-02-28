@@ -1,63 +1,64 @@
+from sqlalchemy.ext.asyncio import AsyncSession
+
 from src.utils.hasher import Hasher
 
-from ..dto import CreateServerRequestDTO, CreateServerDTO, UserServerCreateDTO
-from ..repository import ServerRepository, UserServerRepository
-from ..utils.errors import PasswordIsRequiredException
+from ..daos import ServerDAO, UserServerDAO
+from ..dto import CreateServerRequestDTO, CreateServerDTO, ServerDTO
 
 
 class CreateServerService:
+    class CreateServerServiceException(Exception):
+        pass
+
+    class PasswordIsRequiredException(CreateServerServiceException):
+        pass
+
     def __init__(
-        self, server_repo: ServerRepository, user_server_repo: UserServerRepository
+        self,
+        session: AsyncSession,
+        server_dao: ServerDAO,
+        user_server_dao: UserServerDAO,
     ) -> None:
-        self.server_repo = server_repo
-        self.user_server_repo = user_server_repo
+        self._session = session
+        self._server_dao = server_dao
+        self._user_server_dao = user_server_dao
 
     async def _get_default_image(self) -> str:
         return "https://inspirationseek.com/wp-content/uploads/2016/02/Cute-Alaskan-Dog.jpg"
 
     async def _get_hashed_password(self, password: str) -> str:
         if not password:
-            raise PasswordIsRequiredException()
+            raise self.PasswordIsRequiredException
 
         return await Hasher.hash_password(password)
 
-    async def _get_create_data(
-        self, request_data: CreateServerRequestDTO, admin_id: str
-    ) -> CreateServerDTO:
-        return CreateServerDTO(
-            name=request_data.name,
-            image=request_data.image,
-            is_public=request_data.is_public,
-            password=request_data.password,
-            admin_id=admin_id,
-        )
-
-    async def _get_user_server_data(
-        self, user_id: str, server_id: str
-    ) -> UserServerCreateDTO:
-        return UserServerCreateDTO(user_id=user_id, server_id=server_id)
-
     async def execute(
-        self, user_id: str, request_data: CreateServerRequestDTO
-    ) -> CreateServerDTO:
+        self,
+        user_id: str,
+        request_data: CreateServerRequestDTO,
+    ) -> ServerDTO:
         if not request_data.is_public:
             request_data.password = await self._get_hashed_password(
                 request_data.password
             )
 
         request_data.image = await self._get_default_image()
-
-        create_server_data = await self._get_create_data(request_data, user_id)
-
-        server = await self.server_repo.create(create_server_data.model_dump())
-
-        user_server_data = await self._get_user_server_data(user_id, str(server.id))
-        _ = await self.user_server_repo.create(user_server_data.model_dump())
-
-        return CreateServerDTO(
-            name=server.name,
-            image=server.image,
-            is_public=server.is_public,
-            password=None,
-            admin_id=str(server.admin_id),
+        create_server_data = CreateServerDTO(
+            name=request_data.name,
+            image=request_data.image,
+            is_public=request_data.is_public,
+            password=request_data.password,
+            admin_id=user_id,
         )
+
+        server = await self._server_dao.create_server(
+            session=self._session,
+            server_data=create_server_data.model_dump(),
+        )
+        _ = await self._user_server_dao.connect_user_to_server(
+            session=self._session,
+            server_id=server.id,
+            user_id=user_id,
+        )
+
+        return server

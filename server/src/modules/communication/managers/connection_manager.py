@@ -1,6 +1,6 @@
 from fastapi import WebSocket
 
-from src.modules.auth.entity import UserEntity
+from src.modules.auth.dto import UserReadDTO
 
 from ..services import MessageStoreService, SendMessagesOnConnectService
 from .websocket_pull_manager import websocket_pull_manager
@@ -10,7 +10,11 @@ from ..services.message_to_client_service import MessageToClientService
 
 class ConnectionManager:
     @staticmethod
-    async def connect(websocket: WebSocket, server_id: str, user_id: str):
+    async def connect(
+        websocket: WebSocket,
+        server_id: str,
+        user_id: str,
+    ):
         await websocket_pull_manager.add_connection_to_pull(
             server_id, user_id, websocket
         )
@@ -27,13 +31,21 @@ class ConnectionManager:
         await websocket_pull_manager.remove_connection_from_pull(server_id, user_id)
 
     @staticmethod
-    async def broadcast(server_id: str, user: UserEntity, message_content: str):
+    async def broadcast(
+        server_id: str,
+        user: UserReadDTO,
+        message_content: str,
+    ):
         active_connections = await websocket_pull_manager.get_active_connections(
             server_id
         )
 
         store_message_service = MessageStoreService()
-        message = await store_message_service.execute(server_id, user, message_content)
+        message = await store_message_service.execute(
+            server_id=server_id,
+            user=user,
+            message_content=message_content,
+        )
 
         for pull_data in active_connections:
             ws = pull_data.ws

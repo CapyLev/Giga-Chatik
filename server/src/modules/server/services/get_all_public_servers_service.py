@@ -1,29 +1,15 @@
 from typing import List
 
-from src.modules.auth.dto import UserShortDTO
+from sqlalchemy.ext.asyncio import AsyncSession
 
-from ..dto import ServerPublicShortDTO
-from ..repository.server_repo import ServerRepository
+from ..daos.user_server_dao import UserServerDAO, ServerPublicShortDTO
 
 
 class GetAllPublicServerService:
-    def __init__(self, server_repo: ServerRepository) -> None:
-        self.server_repo = server_repo
+    def __init__(self, session: AsyncSession, user_server_dao: UserServerDAO) -> None:
+        self._session = session
+        self._user_server_dao = user_server_dao
 
     async def execute(self) -> List[ServerPublicShortDTO]:
-        servers = await self.server_repo.get_public_servers()
-
-        return [
-            ServerPublicShortDTO(
-                id=str(server.id),
-                image=server.image,
-                desc=server.description,
-                name=server.name,
-                admin=UserShortDTO(
-                    id=str(server.admin.id),
-                    username=server.admin.username,
-                ),
-                count_of_members=len(server.user_servers),
-            )
-            for server in servers
-        ]
+        servers = await self._user_server_dao.get_public_servers(session=self._session)
+        return servers

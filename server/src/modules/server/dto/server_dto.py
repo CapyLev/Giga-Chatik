@@ -3,7 +3,7 @@ from typing import Optional, Union
 
 from pydantic import BaseModel
 
-from src.modules.auth.dto import UserShortDTO
+from src.modules.server.daos.user_server_dao import UserShortDTO
 
 
 class ServerDTO(BaseModel):

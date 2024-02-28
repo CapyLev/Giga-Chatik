@@ -85,6 +85,7 @@ services:
     volumes:
       - ./server/src:/usr/src/app/src
       - ./server/config:/usr/src/app/config
+      - ./server/logs:/usr/src/app/logs
     networks:
       - chatik-network
 

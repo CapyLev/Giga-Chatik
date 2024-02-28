@@ -7,4 +7,4 @@ from .server_dto import (
     CreateServerDTO,
     ServerPublicShortDTO,
 )
-from .user_server_dto import UserServerDTO, UserServerCreateDTO
+from .user_server_dto import UserServerDTO

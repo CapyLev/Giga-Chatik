@@ -1,6 +1,6 @@
 from sqlalchemy.orm import DeclarativeBase, Mapped, declared_attr, mapped_column
 
-from .repository import BaseRepositoryMixin
+from .mixins import BaseRepositoryMixin
 
 
 class Base(DeclarativeBase, BaseRepositoryMixin):

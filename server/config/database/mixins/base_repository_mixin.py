@@ -3,7 +3,6 @@ from uuid import UUID
 
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.orm.exc import NoResultFound
 
 PK = TypeVar("PK", bound=Union[str, UUID])
 M = TypeVar("M")
@@ -12,27 +11,24 @@ M = TypeVar("M")
 class BaseRepositoryMixin:
     @classmethod
     async def find_by_pk(
-        cls, session: AsyncSession, pk: PK, raise_error: bool = False
-    ) -> Union["Base", bool]:
+        cls,
+        session: AsyncSession,
+        pk: PK,
+    ) -> M:
         query = select(cls).filter_by(id=pk)
-        result = await cls._execute(session, query)
+        result = await cls.execute(session, query)
         instance = result.scalar()
 
-        if instance is not None:
-            return instance
-        elif raise_error:
-            raise NoResultFound("Instance not found")
-        else:
-            return False
+        return instance
 
     @classmethod
-    async def find_all(cls, session: AsyncSession) -> List[Optional["Base"]]:
+    async def find_all(cls, session: AsyncSession) -> List[Optional[M]]:
         query = select(cls)
-        result = await cls._execute(session, query)
+        result = await cls.execute(session, query)
         return result.scalars().all()
 
     @classmethod
-    async def create(cls, session: AsyncSession, data: Dict[str, Any]) -> "Base":
+    async def create(cls, session: AsyncSession, data: Dict[str, Any]) -> M:
         instance = cls(**data)
         session.add(instance)
         await session.commit()
@@ -65,11 +61,11 @@ class BaseRepositoryMixin:
     @classmethod
     async def find_by_parameters(
         cls, session: AsyncSession, **kwargs
-    ) -> List[Optional["Base"]]:
+    ) -> List[Optional[M]]:
         query = select(cls).filter_by(**kwargs)
-        result = await cls._execute(session, query)
+        result = await cls.execute(session, query)
         return result.scalars().all()
 
     @classmethod
-    async def _execute(cls, session: AsyncSession, query: Any) -> Any:
+    async def execute(cls, session: AsyncSession, query: Any) -> Any:
         return await session.execute(query)

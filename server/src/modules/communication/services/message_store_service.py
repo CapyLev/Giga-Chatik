@@ -2,13 +2,16 @@ from src.utils.funcutils import get_uuid_as_str, get_timestamp_as_int
 
 from src.modules.redis import RedisConnectionManager, RedisSessionType
 from src.modules.communication.dto import MessageDTO
-from src.modules.auth.entity import UserEntity
-from src.modules.auth.dto import UserShortDTO
+from src.modules.auth.dto import UserReadDTO
+from src.modules.auth.dto.user import UserShortDTO
 
 
 class MessageStoreService:
     async def _create_message(
-        self, server_id: str, user_short_info: UserShortDTO, message_content: str
+        self,
+        server_id: str,
+        user_short_info: UserShortDTO,
+        message_content: str,
     ) -> MessageDTO:
         message_id = await get_uuid_as_str()
         timestamp = await get_timestamp_as_int()
@@ -24,7 +27,10 @@ class MessageStoreService:
         )
 
     async def execute(
-        self, server_id: str, user: UserEntity, message_content: str
+        self,
+        server_id: str,
+        user: UserReadDTO,
+        message_content: str,
     ) -> str:
         user_short_info = UserShortDTO(id=str(user.id), username=user.username)
 

@@ -1,1 +1,1 @@
-from .user import UserRead, UserUpdate, UserCreate, UserShortDTO
+from .user import UserReadDTO, UserUpdateDTO, UserCreateDTO, UserShortDTO

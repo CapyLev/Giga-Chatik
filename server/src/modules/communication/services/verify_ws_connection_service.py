@@ -1,37 +1,44 @@
-from typing import Union
+from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.modules.server.utils.errors import ServerNotFoundException
-from src.modules.server.repository import ServerRepository, UserServerRepository
+from src.modules.server.daos import ServerDAO, UserServerDAO
 
 
 class VerifyWSConnectionService:
+    class VerifyWSConnectionServiceException(Exception):
+        pass
+
+    class ServerNotFoundException(VerifyWSConnectionServiceException):
+        pass
+
     def __init__(
         self,
-        server_repo: ServerRepository,
-        user_server_repo: UserServerRepository,
+        session: AsyncSession,
+        server_dao: ServerDAO,
+        user_server_dao: UserServerDAO,
     ) -> None:
-        self._server_repo = server_repo
-        self._user_server_repo = user_server_repo
+        self._session = session
+        self._server_dao = server_dao
+        self._user_server_dao = user_server_dao
 
-    async def _check_if_server_exist(self, server_id: str) -> bool:
-        return await self._server_repo.find_by_pk(server_id)
-
-    async def _check_if_user_server_exist(self, user_id: str, server_id: str) -> bool:
-        data = {"user_id": user_id, "server_id": server_id}
-        user_servers_count = len(
-            await self._user_server_repo.find_by_parameters(**data)
+    async def execute(
+        self,
+        user_id: str,
+        server_id: str,
+    ) -> None:
+        server = await self._server_dao.get_server_by_id(
+            session=self._session, server_id=server_id
         )
 
-        if user_servers_count > 0:
-            return True
+        if not server:
+            raise self.ServerNotFoundException
 
-        return False
+        is_user_connected_to_server = (
+            await self._user_server_dao.is_user_connected_to_server(
+                session=self._session,
+                user_id=user_id,
+                server_id=server_id,
+            )
+        )
 
-    async def execute(self, user_id: str, server_id: str) -> Union[None, Exception]:
-        if not await self._check_if_server_exist(server_id):
-            raise ServerNotFoundException()
-
-        if not await self._check_if_user_server_exist(user_id, server_id):
-            raise ServerNotFoundException()
-
-        return
+        if not is_user_connected_to_server:
+            raise self.ServerNotFoundException

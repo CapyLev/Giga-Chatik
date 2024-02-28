@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import Optional
 
 from fastapi_users.schemas import (
@@ -9,20 +10,21 @@ from fastapi_users.schemas import (
 from pydantic import EmailStr, BaseModel
 
 
-class UserRead(BaseUser):
+class UserReadDTO(BaseUser):
     id: models.ID
     username: str
     email: EmailStr
+    created_at: datetime
     is_active: Optional[bool] = True
     is_superuser: Optional[bool] = False
     is_verified: Optional[bool] = False
 
 
-class UserUpdate(BaseUserUpdate):
+class UserUpdateDTO(BaseUserUpdate):
     username: str
 
 
-class UserCreate(CreateUpdateDictModel):
+class UserCreateDTO(CreateUpdateDictModel):
     username: str
     email: EmailStr
     password: str

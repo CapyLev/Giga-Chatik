@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 
-from .dto import UserCreate, UserRead, UserUpdate
+from .dto import UserCreateDTO, UserReadDTO, UserUpdateDTO
 from .settings import auth_backend, fastapi_users_auth
 
 router = APIRouter()
@@ -13,13 +13,13 @@ router.include_router(
 )
 
 router.include_router(
-    fastapi_users_auth.get_register_router(UserRead, UserUpdate),
+    fastapi_users_auth.get_register_router(UserReadDTO, UserUpdateDTO),
     prefix="",
     tags=["auth"],
 )
 
 router.include_router(
-    fastapi_users_auth.get_users_router(UserRead, UserCreate),
+    fastapi_users_auth.get_users_router(UserReadDTO, UserCreateDTO),
     prefix="",
     tags=["auth"],
 )

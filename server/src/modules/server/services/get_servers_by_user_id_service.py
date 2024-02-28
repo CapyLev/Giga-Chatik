@@ -1,28 +1,18 @@
 from typing import List
 
-from ..dto import ServerImageDTO, UserServerDTO
-from ..repository import UserServerRepository
+from sqlalchemy.ext.asyncio import AsyncSession
+
+from ..daos.user_server_dao import UserServerDAO, ServerImageDTO
 
 
 class GetServersByUserIdService:
-    def __init__(self, user_server_repo: UserServerRepository) -> None:
-        self.user_server_repo = user_server_repo
-
-    async def _collect_user_servers_by_user_id(
-        self, user_id: str
-    ) -> List[UserServerDTO]:
-        return await self.user_server_repo.get_user_servers_by_user_id(user_id)
+    def __init__(self, session: AsyncSession, user_server_dao: UserServerDAO) -> None:
+        self._session = session
+        self._user_server_dao = user_server_dao
 
     async def execute(self, user_id: str) -> List[ServerImageDTO]:
-        user_servers = await self._collect_user_servers_by_user_id(user_id)
+        user_servers = await self._user_server_dao.get_user_servers_by_user_id(
+            session=self._session, user_id=user_id
+        )
 
-        if not user_servers:
-            return []
-
-        return [
-            ServerImageDTO(
-                id=str(server.server.id),
-                image=server.server.image,
-            )
-            for server in user_servers
-        ]
+        return user_servers

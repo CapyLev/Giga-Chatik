@@ -2,7 +2,7 @@ from typing import Union
 
 from fastapi import HTTPException
 
-from ..entity import UserEntity
+from ..dto import UserReadDTO
 from ..manager import UserManager
 from ..settings import fastapi_users_auth, get_jwt_strategy
 
@@ -11,7 +11,7 @@ current_active_user = fastapi_users_auth.current_user(active=True)
 
 async def websocket_auth(
     token: str, user_manager: UserManager
-) -> Union[UserEntity, Exception]:
+) -> Union[UserReadDTO, Exception]:
     if not token:
         raise HTTPException(status_code=401, detail="Token is missing")
 
